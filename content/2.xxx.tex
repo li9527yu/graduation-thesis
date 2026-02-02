@@ -1,0 +1,346 @@
+\chapter{图文情感相关性语料构建与数据分析}
+现有图文关系定义仅关注文本方面与图像的显式对齐或全局相关性，忽略图文之间隐式情感关联。本章针对该问题从情感表达角度定义方面级跨模态情感相关性，构建数据语料并进行数据分析。同时设计了基于情感相关性感知的多模态方面情感分类模型，为后续研究提供了统一的基准与评估框架。
+ 
+
+\section{引言}
+
+多模态方面级情感分类是情感分析领域中一项关键的细粒度任务，其核心目标是判断文本-图像对中针对文本所提及特定方面的情感极性(即积极、消极或中性)。例如在图\ref{fig:explain}中，多模态方面级情感分类的任务是识别出针对 “Trey Songz” 这一特定方面的情感为积极。近年来，多模态方面级情感分类已取得显著进展~\cite{ling-etal-2022-vision,zhou2023aomdetectingaspectorientedinformation,peng2024novel}。随着社交媒体平台愈发多地采用多模态内容进行信息传播，精准的多模态方面级情感分类对提升信息理解能力至关重要，同时也能为观点挖掘\cite{huang2025opinion}、推荐系统\cite{zhang2024towards}和虚假信息检测\cite{luvembe2023dual}等任务提供有力支持。
+
+与仅考虑单一文本模态的文本情感分析不同，多模态情感分析需要融合文本和视觉语义信息来判断情感极性。因此，在多模态场景中，文本与图像的关系对情感分类起着关键作用：相关图像能够补充文本信息，助力更全面地理解情感；而无关图像则可能引入噪声，误导模型做出错误的情感预测。基于上述考量，已有研究尝试利用图文跨模态相关性来提升情感分析性能。Ju 等人\cite{ju2021joint}采用了 Vempala 和 Preoţiuc-Pietro\cite{vempala2019categorizing}提出的跨模态关系方案，并取得了性能提升。该方案从全局视角考虑文本整体与图像的关系：当图像能够直观描述或补充文本内容时，即认为其与文本整体相关。尽管该标注方案已被证实对多模态方面级情感分类有益，但在实际辅助多模态方面级情感分类任务时仍存在局限：多模态方面级情感分类的核心是关注文本中每个方面的情感，而在包含多个方面的文本中，单个方面与图像的相关性未必与全局图文相关性一致。仅依赖全局相关性可能引入无关视觉信息，最终导致特定方面的情感判断不准确。例如在图\ref{fig:explain}-(a)中，图像与文本整体相关，但 “Oklahoma” 这一方面与图像无关，此时依赖全局相关性会导致情感预测错误。为捕捉细粒度的方面级跨模态相关性，Yu等人~\cite{yu2022targeted}提出了一种方面-图像相关性数据集。该方案基于显式对齐来定义文本方面与图像的相关性，即当图像明确描绘或包含文本中提及的方面时，认为二者相关。如图\ref{fig:explain}-(b)中，“勒布朗・詹姆斯(LeBron James)” 这一方面在图像中清晰呈现，因此判定该方面与图像相关。尽管全局跨模态相关性和方面级跨模态相关性均能提升多模态方面级情感分类的性能，但这些方法仍忽略了隐式情感关联，即当方面未在图像中显式出现时，图像仍能增强或传递针对该方面的情感。例如在图\ref{fig:explain}-(c)中，“Trey Songz” 未在图像中显式出现，但小狗欢快的表情传递了针对该方面的积极情感。
+
+\begin{figure}[t]
+    \centering
+      \includegraphics[width=1\textwidth]{fig/chp2/Figure1.pdf}
+      \caption{本章提出的跨模态相关性定义与Vempala\cite{vempala2019categorizing}等人和Yu\cite{yu2022targeted}等人所提出的相关性定义的对比示例。图中的实线框代表显式对齐关系，虚线框则代表隐性情感关联；相应地，文本中的实线框用于突出标注与图中实线框或虚线框内容相关联的文本信息。}
+      \label{fig:explain}
+\end{figure}
+
+为解决上述局限，本章提出一种方面级情感跨模态相关性(AECR)，用于捕捉文本的方面与图像间的显式对齐和隐式情感关联。如图\ref{fig:explain} 所示，尽管 “Trey Songz” 未在图像中显式呈现，但用户通过图像中小狗的愉悦表情表达了对该方面的积极情感，因此在该跨模态关系方案中，图像与该方面存在隐式情感关联。具体而言，图像是整个图文对的情感来源，因此二者相关。基于该跨模态关系方案，本文构建了方面级情感跨模态相关性数据集(AECR-Twitter)。为验证所提跨模态关系方案和新构建数据集在下游多模态方面级情感分类任务中的有效性，本章探索并对比了多种将跨模态相关性信息融入多模态方面级情感分类的方法，包括轻量级多模态模型和大型语言模型(LLMs)，并在 Twitter-15 和 Twitter-17 两个广泛使用的数据集上进行了大量实验。
+
+\section{图文情感相关性语料构建}
+本节首先详细介绍图文情感相关性的标注规范以及提供相应的实例说明。紧接着，本节对方面级情感跨模态关系数据集的构建过程进行详细描述，包括标注数据的选取、标注工具的使用、标注团队的组建与培训以及标注的具体流程
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=1\textwidth]{fig/chp2/Figure2.pdf} 
+  \caption{本章中四种相关性类型的示例}
+  \label{fourtypes}
+  \end{figure*}
+
+\subsection{标注规范}
+本章在综合前人跨模态关系定义~\cite{chen2013understanding,vempala2019categorizing,xu2022ananet,chen2023joint}后，并结合多模态方面级情感分类任务特点，提出一种情感语义感知的方面级图文关系标注体系。该方案基于图文对中显式表达的对象和隐式传递的情感语义信息，将图文关系划分为 “相关” 和 “不相关” 两类。基于此方案，我们制定了包含详细说明和示例的标注规范，旨在构建高质量的方面级情感跨模态关系数据，为下游方面级情感分析任务提供支持。具体而言，“相关” 的图文关系包含以下三种类型：
+\begin{itemize}
+  \item 语义相关但情感无关：图像明确包含文本中提到的方面，但未提供任何相关情感信息。图\ref{fourtypes}-(a) 给出了一个示例：图像中包含 “Garrett Walker” 这一方面(人物实体)，但未传递与推文相关的任何情感信息。
+  \item 情感表达来源：图像中的情感语义信息是判断整体多模态情感的依据，仅依靠文本无法完成这一判断。例如，在图\ref{fourtypes}-(b) 中，图像中人物的表情补充了情感表达，明确了文本中对 “SamHunt” 这一方面的模糊情感倾向，因此该图像可作为该方面的情感来源。
+  \item 增强情感表达：图像通过提供额外的情感语义信息，强化了方面的情感表达。例如，在图\ref{fourtypes}-(c) 中，图像中女性的悲伤表情，强化了文本中对 “Justin Bieber” 仅获得两项奖项的遗憾情绪，直观体现了图像对情感表达的增强作用。
+\end{itemize}
+
+“不相关” 的图文关系指图文对不属于上述任何一类情况，即图像既不包含文本中提到的方面，也不提供任何额外的情感相关信息。例如，在图\ref{fourtypes}-(d) 中，方面 “TrailBlazers” 指 NBA 开拓者队，但图像展示的是 NBA 勇士队，因此该图像与 “TrailBlazers” 这一方面显然不相关。在此情况下考虑图像内容只会引入无关信息。与已有的标注体系不同，以往方案要么仅将文本中的方面与图像中的对象显式对齐时定义为相关~\cite{yu2022targeted}，其余情况均视为不相关；要么聚焦于文本整体与图像的全局相关性~\cite{vempala2019categorizing,chen2023joint}，而非方面级相关性。而本文提出的方案同时考虑了文本与图像之间的方面级显式对齐和隐式情感语义关系。这意味着，即使方面未显式出现在图像中，只要图文双方共同参与整体情感的表达，仍将其判定为相关。例如，在图\ref{fourtypes}-(c) 中，文本中的 “Justin Bieber” 这一方面与图像中的对象并无显式对齐，但图像强化了对 “Justin Bieber” 的遗憾和悲伤情绪。识别这种隐式情感相关性，有助于我们更好地利用以往被忽视但有价值的图文关系，最终提升方面级情感分析的性能。
+
+\subsection{人工标注数据构建}
+
+本章采用一套科学的数据标注流程来对图文方面级情感分析数据集 进行高质量的人工标注。具体地，为确保标注的准确性，本研究采取严格的双人独立标注方法，即两位标注员进行独立标注，当两位标注员给出不一致的结果时，将由一位第三方专家介入处理这种不一致，以确定最终的正确答案。通过该标注过程，成功构建了一个高质量的多模态方面级图文情感相关性数据集(Aspect-level Emotional Cross-modal Relation dataset,   AECR-Twitter)，该数据集包括 3562 个样本。接下来，本小节将从标注数据的选择、标注工具、标注人员的招聘与培训和标注质量的控制等方面详细介绍数据构 建的具体细节。
+
+\subsubsection{标注数据的选择}
+本文构建的方面级情感跨模态关系数据集以 Twitter-17 数据集~\cite{yu2019adapting}为基础，遵循先前相关研究的做法~\cite{yu2022targeted,chen2023joint}。Twitter-17 数据集包含从社交媒体平台 Twitter 收集的多模态帖子，涵盖文本 - 图像对，且每个文本 - 图像对均标注了文本方面及对应方面的情感极性。我们选取 Twitter-17 数据集中的训练集(含 3562 个样本)进行标注，标注内容包括：1.单模态语境下各方面的情感标签；2.方面级情感跨模态关系。其中，单模态语境下的方面情感标注将作为辅助信号，助力更精准地标注方面级情感跨模态关系类型。随后，我们将构建的 AECR-Twitter 数据集按 8:1:1 的比例随机划分为训练集、验证集和测试集，详细统计信息见表 3。值得注意的是，该数据集经过精心筛选，已剔除有害内容。
+
+\subsubsection{标注工具}
+图中展示了标注工具的标注界面。对于每个需要标注的图文对，标注工具会显示该图文对以及目标方面。当根据我们的标注流程，在我们标注工需要经过三个步骤，首先是只显示文本和目标方面，选择目标方面对应的情感极性，接着第二个步骤中，标注工具只会显示图片和目标方面，需要根据图片内容去标注方面的情感，若图片与方面无关那么需要标注无情感。在最后的步骤中会展示完整的图文对和目标方面，并提供数据集中已有的金标情感极性，结合上述信息来分别从信息层面和情感层面来标注方面图文情感相关性。
+
+\subsubsection{标注人员的招聘与培训}
+为了确保数据集的高质量标注，本研究聘请 4 名具备自然语言处理或多模态分析相关背景的研究生作为标注员，以及 1 名经验丰富的资深标注员作为专家仲裁。其中，专家的核心职责是协调并最终裁决标注过程中出现的分歧。所有标注人员的报酬是根据他们的标注质量和完成的工作量来决定的，以此激励标注员严谨、细致地执行标注任务。为确保标注判断的全面性与客观性，我们为每个推文图文对设计了 “分阶段递进” 的标注流程，避免标注员仅凭单一模态信息仓促下结论：
+\begin{itemize}
+  \item 第一步(文本单模态标注)：仅向标注员提供推文文本和对应的方面实体，要求其仅基于纯文本内容判断该方面的情感极性 ，旨在建立纯文本维度的情感基准，为后续跨模态关系判断提供参考。
+  \item 第二步(图像单模态标注)：仅向标注员提供图像和对应的方面实体，要求其仅基于视觉内容(如图像中的人物表情、场景氛围等)判断该方面的情感倾向 ，用于获取纯视觉维度的情感线索，与文本维度形成互补。
+  \item 第三步(方面级图文情感相关性判断)：向标注员完整呈现图文对，并提供 Twitter-17 数据集中已有的多模态方面级情感标签作为参考，要求标注员结合前两步的独立判断结果，综合评估并最终确定 “方面级情感跨模态关系” 的具体类型。这种 “先分后合” 的流程，能有效减少单一模态信息的误导，提升跨模态关系判断的准确性。
+\end{itemize}
+
+在正式启动标注工作前，所有标注员需参加专项培训：一方面，详细解读标注准则(包括 4 种关系类型的定义、边界案例的判断标准等)，通过典型示例演示帮助标注员形成统一认知；另一方面，指导标注员熟练操作我们自主开发的标注工具，确保其能高效、规范地记录标注结果，避免因工具使用不熟练或对规则理解不一致导致的系统性误差。
+
+\subsubsection{标注质量的控制}
+在标注过程中，本研究基于开发的标注工具进行严格的独立双重标注，以保证标注数据的质量，工作流程如图所示。具体来说，每个图文对被随机分配给两名不同的标注者，由二者独立完成方面级情感相关性标注；若两名标注者的标注结果一致，则直接将该结果作为最终标注；若结果不一致，由第三位专家标注者在分析双方标注后确定最终答案。
+ 
+
+
+\section{方面级情感跨模态相关性数据集分析}
+为了评估构建的AECR-Twitter数据集的质量，本节对其进行了标注一致性分析。此外，为了探索相关性标签和情感标签的相关关系，以及方面级图文情感相关性和前人标注体系的区别，本节从不同的角度对对标注的 AECR-Twitter 数据集进行了分析。
+
+
+\setlength{\tabcolsep}{2.5pt}
+\begin{table}[!htbp]
+  \centering
+  \caption{我们的AECR-Twitter数据集标签分布情况}
+  \label{tab:labeldistribution}
+\begin{tabular}{llll}
+\toprule
+% \midrule
+  \textbf{Relevance} & \multicolumn{1}{c}{\textbf{Type}}& \textbf{Number} &\textbf{Proportion} \\
+  \hline
+  \multirow{3}{*}{\textbf{Relevant}} & The image is semantically related to the text but emotionally irrelevant  &  868 &  24.37\%  \\
+       & The image enhances the emotional expression conveyed in the text & 730 & 20.49\%  \\
+       & The image is the source of emotional expression & 248 & 6.96\%  \\
+       \hline
+  \textbf{Irrelevant}  & The image is irrelevant to aspect  & 1,716  & 48.18\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\setlength{\tabcolsep}{2.5pt}
+\begin{table}[!htbp]
+  \centering
+\caption{与前人工作的标注比较}
+\label{tab:ComparedwithPrevious}
+\begin{tabular}{lll}
+\toprule
+% \midrule
+   & \textbf{Relevant}  &    \textbf{Irrelevant} \\
+   \hline
+   \citet{yu2022targeted}  & 39.1\%      & 60.9\%     \\
+   \hline
+  \multirow{2}{*}{Our annotation}  &45.3\%          & 54.7\%  \\
+  &(Explicit: 37.7\%           Implicit: 7.6\%  ) & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{AECR标注一致性分析}
+在标注过程中每项标注任务会分配给两名标注者进行独立标注。我们针对标注完成的跨模态关系计算了标注者间一致性比例，结果显示 84\% 的任务中两名标注者得出了一致结果，另有 16\% 的任务需由第三位专家标注者进行进一步审核。经调查发现，标注不一致主要原因在于标注者对图像和文本中情感表达的解读存在差异。这表明，执行严格的双重标注是保障数据质量的关键。
+
+\subsection{AECR标签分布}
+表\ref{tab:labeldistribution}展示了AECR数据集中标签的分布情况。由表可以得知，其中，“Irrelevant”(无关)标签占比 48.18\%。这一现象反映了社交媒体平台的内容特性，主要由两方面原因造成。首先，在同时包含多个方面(aspect)的推文中，图像通常只与其中一个方面相关，而与其他方面无关。其次，用户在发布推文时也可能附上与文本内容完全无关的图像。对于 “Relevant”(相关)标签，最常见的类型是：图像呈现了文本中的方面，但不包含任何情感信息，占比 24.37\%。第二常见的类型是图像通过提供额外的情感线索来增强文本的情感表达。最少见的类型是推文的情感完全通过图像传达。这表明用户更倾向于使用文本作为表达情感的主要模态，而图像通常用于辅助文本；仅通过图像传递情感的情况相对较少。
+
+\subsection{与前人工作的标注比较}
+我们将数据集中相关与无关标签的分布与已有研究进行对比，并在表\ref{tab:ComparedwithPrevious}中给出了显性与隐性相关性的比例。与Yu 等\cite{yu2022targeted}相比，其仅将具有显性对齐关系的文本-图像对视为相关，而忽略了隐性的情感关联，因此我们的数据集由于纳入了隐性的跨模态相关性，具有更高比例的相关标签。在我们的所标注的相关性类型中，显性相关与隐性相关分别占 37.7\% 和 7.6\%。这表明，在图文相关的场景中，大约六分之一的情感表达是通过隐含情感关联的图像(如表情包等)来传递的。与以往的跨模态关系标注方案相比，我们的方法能够更有效地捕捉图像与文本之间这些隐性的情感联系，从而更好地支持下游的多模态方面级情感分类(MASC)任务。
+
+
+\begin{figure}[t]
+\centering
+  \includegraphics[width=0.7\textwidth]{fig/chp2/Figure3.pdf}
+  \caption{AECR-Twitter数据集中不同相关性类型与情感类别之间的分布情况}
+  \label{relevanceandsentiment}
+\end{figure}
+
+
+\subsection{情感标签与相关性标签关系分析}
+我们分析不同相关性类型与情感类别之间的关系。如图\ref{relevanceandsentiment}所示，当情感为中性时，占比最高的情况是该方面与图像无关，其次是图像与方面在语义上相关但不包含情感联系的情况。这表明，当用户对某一方面实体没有情感倾向时，图像往往与该方面无关，或仅作为描述性补充。在积极情感的场景中，占比最高的情况是图像能够增强方面的情感表达，说明用户倾向于通过文本与图像的共同作用来强化积极情绪。在消极情感中，图像无关、语义相关但情感无关，以及图像增强情感表达三类情况的比例较为接近。这说明负面情绪的表达方式更加多样化。
+
+\section{融合跨模态方面级情感相关性的多模态情感分析}
+
+本章提出的方法主要由三个部分构成。首先，我们给出了任务的形式化定义，明确界定了基于方面的跨模态关系推理任务、多模态方面级情感分类（MASC）任务，以及两者之间的内在联系。其次，我们总结了现有 MASC 模型采用的通用架构。最后，我们详细阐述了本文提出的模块，旨在引入方面级的情感跨模态相关性。
+
+\subsection{任务定义}
+为了降低无关图像的干扰并提升情感分类性能，我们将本文提出的“方面级情感跨模态相关性”引入到 MASC 任务中。具体而言，基于方面的跨模态关系推理任务旨在预测图像与文本中给定方面之间的相关性。随后，利用该相关性概率抑制无关图像的影响，从而改进多模态方面级情感分类任务的效果。
+
+具体来说，数据集中的每个样本 $\mathbf{x}$ 包含一条推文，该推文由文本-图像对及其对应的方面组成。其中，$x^t$、$x^i$ 和 $x^a$ 分别表示文本、图像和方面。文本 $x^t$ 是由 $n$ 个单词组成的句子；而方面 $x^a$ 是指文本中的命名实体（如人名、地名或组织名），它是 $x^t$ 的一个包含 $m$ 个单词的子序列。
+
+\textbf{基于方面的跨模态关系推理}形式化为一个二分类问题。给定输入 $\mathbf{x} = (x^t, x^i, x^a)$，其目标是预测图像 $x^i$ 与文本 $x^t$ 针对给定方面 $x^a$ 的关系 $r$，其中 $r \in \{\textit{relevant}, \textit{irrelevant}\}$。
+
+\textbf{多模态方面级情感分类}旨在针对给定文本 $x^t$ 和图像 $x^i$ 对中的方面 $x^a$，预测其情感极性标签 $y \in \{\textit{positive},  \textit{neutral},  \textit{negative}\}$。
+
+\subsection{现有MASC模型的通用架构}
+基础 MASC 模型的架构主要包含三个核心组件：文本/视觉编码器用于将文本和图像编码为特征表示；方面感知提取模块提取两个模态中聚焦于方面相关信息的特征表示；情感分类模块则融合文本和视觉特征以获得多模态表示，并将其输入 Softmax 层进行情感预测。
+
+\textbf{文本/视觉编码器}。
+给定输入 $\mathbf{x} = (x^t, x^i, x^a)$（包含文本-图像对及一个方面），我们分别使用文本编码器和视觉编码器来提取文本和视觉模态的上下文特征表示。对于文本编码器，我们采用 RoBERTa \cite{liu2019roberta} 或 BERT \cite{devlin-etal-2019-bert} 对文本 $x^t$ 和方面 $x^a$ 的拼接序列进行编码。对于视觉编码器，我们利用 Faster R-CNN \cite{ren2016faster} 或 ViT \cite{dosovitskiy2021an}。最终得到的文本和图像表示分别记为 $\mathbf{h}^t$ 和 $\mathbf{h}^i$。
+
+\textbf{方面感知提取模块}。 在获得文本和图像表示后，我们将它们输入到方面感知提取模块中。该模块从文本和图像中提取并提炼与方面相关的表示。该模块可以通过多种方法实现，其中包括 ITM \cite{yu2022targeted}、HIMT \cite{yu2022hierarchical} 和 DPFN \cite{wang2023dual} 等框架中的模块。对于方面感知的文本表示，应用注意力机制或依存句法分析器等方法来获取方面感知的文本表示 $\mathbf{h}^{a2t}$。对于方面感知的视觉表示，则应用跨模态 Transformer (CMT) \cite{tsai2019multimodal} 等方法来捕获方面感知的视觉表示 $\mathbf{h}^{a2i}$。
+
+\textbf{情感分类模块}。
+我们通常采用 \citet{wang2023dual} 中的拼接方法或 \citet{yu2022hierarchical,yu2022targeted} 中的 Transformer 方法来生成最终的多模态融合表示 $\mathbf{h}^f$。随后，我们将 $\mathbf{h}^f$ 输入 Softmax 层，以预测情感标签 $\mathbf{y}$ 的概率分布，从而进行情感分类：
+
+\begin{equation}
+    p(\mathbf{y})=\text{Softmax}(\mathbf{W}_s \mathbf{h}^f+\mathbf{b}_s)
+\end{equation}
+在训练过程中，对于每个输入 $\mathbf{x}$，我们使用交叉熵损失最大化真实情感标签 $y^*$ 的概率，目标函数如下：
+\begin{equation}
+    \mathcal{L}_{s}=-\log P(y^*)
+\end{equation}
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.7\textwidth]{fig/chp2/Figure4.pdf} 
+  \caption {EmoCRel-MASC架构概览}
+  \label{method}
+\end{figure}
+
+\subsection{跨模态情感相关性感知的的情感分类增强}
+如图 \ref{method} 所示，我们提出了一种跨模态情感相关性感知的多模态方面级情感分类方法（EmoCRel-MASC），旨在将预测的相关性有效地整合到 MASC 任务中。跨模态关系推理模块输出一个相关性概率，用于控制图像的贡献度；我们使用 AECR-Twitter 数据集作为监督信号来训练该模块。随后，关系感知的多模态融合模块利用预测的相关性概率来指导文本和视觉特征的融合，从而有效地抑制无关图像的影响。
+
+\textbf{方面级情感跨模态关系推理}。为了将本文提出的方面级情感跨模态关系引入 MASC 任务，我们采用了一个跨模态关系推理模块来执行基于方面的跨模态关系推理，并获取相应的相关性概率。该概率用于控制图像的贡献度，并减少无关图像的干扰。具体而言，我们首先应用跨模态 Transformer（CMT）来捕获跨模态图像表示，其中图像表示 $\mathbf{h}^i$ 作为查询向量 $\mathbf{q}$，文本表示 $\mathbf{h}^t$ 作为Key $\mathbf{k}$ 和Value $\mathbf{v}$。接着，执行最大池化操作以获取用于跨模态关系推理的最显著跨模态特征 $\mathbf{h}^{t2i}$：
+\begin{equation}
+    \mathbf{h}^{t2i}=\text{maxpool}(\text{CMT}{(\mathbf{h}^i,\mathbf{h}^t,\mathbf{h}^t)})
+\end{equation}
+
+最终的相关性概率计算如下。值得注意的是，我们将该模块预测为“相关”类别的概率作为相关性概率。
+\begin{equation}
+    p(\mathbf{r})=\text{Sigmoid}(\mathbf{W_r}\mathbf{h}^{t2i}+\mathbf{b_r})
+\end{equation}
+
+\textbf{关系感知的跨模态融合}。 为了缓解 MASC 任务中无关图像的干扰，我们设计了一个关系感知的多模态融合模块，利用相关性概率引导模型关注相关图像，同时最小化无关图像的影响。具体而言，我们首先利用方面感知视觉提取模块来获取方面感知的视觉表示 $\mathbf{h}^{a2i}$。然后，我们将跨模态相关性概率 $p(r)$ 进行广播（broadcast）以匹配 $\mathbf{h}^{a2i}$ 的维度，得到矩阵 $\mathbf{R}$。该矩阵 $\mathbf{R}$ 被用作权重，通过逐元素乘法获得关系感知的跨模态表示 $\mathbf{h}^r$：
+\begin{equation}
+ \begin{split}
+     & \mathbf{h}^r= \mathbf{R} \odot \mathbf{h}^{a2i}
+ \end{split}
+\end{equation}
+例如，当相关性概率 $\mathbf{R}$ 趋近于 0 时，表明图像与文本不相关，模型相应地在多模态融合过程中降低视觉特征的贡献。最后，我们将关系感知的跨模态表示 $\mathbf{h}^r$ 和方面感知的文本表示 $\mathbf{h}^{a2t}$ 输入到上述多模态融合模块中，生成增强的多模态融合表示 $\mathbf{h}^{AECR-f}$。随后，我们将 $\mathbf{h}^{AECR-f}$ 作为最终的多模态特征输入 Softmax 层进行情感分类。此外，对于每个输入 $\mathbf{x}$，我们使用两个独立的交叉熵损失函数来分别最大化其真实跨模态关系标签 $r^*$ 和真实情感标签 $y^*$ 的概率，联合目标函数为：
+\begin{equation}
+    \mathcal{L} = \mathcal{L}_{s}+\mathcal{L}_{r}=-\log P(y^*)-\log P(r^*)
+\end{equation}
+在推理阶段，我们选择得分最高的标签作为预测的情感标签。
+
+
+\section{实验设置与结果分析}
+
+\subsection{评价指标}
+本课题的图文多模态方面级情感分类问题是一个典型的分类任务，我们使用正确率(Accuracy, Acc)和宏平均 F1值(F1)来评估性能。其中，F1值是精确率(Precision)和召回率(Recall)的加权调和平均。在这些指标中，正确率既可以用于评估二分类系统的性能，也可以用于评估多分类系统的性能。而精确率、召回率和F1值则只能用于评估二分类系统的性能。本节将简要介绍以上评价指标在多分类系统中的定义，它们的计算公式如下： 
+\begin{equation}
+\text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}}
+\end{equation}
+\begin{equation}
+\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}
+\end{equation}
+\begin{equation}
+\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}
+\end{equation}
+\begin{equation}
+\text{F1} = \frac{2 \times \text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
+\end{equation}
+
+其中，\text{TP}表示该类被模型正确分类的样本数，\text{FP}表示其他类别被不正确地分类到该类别的样本数，\text{FN}表示该类被不正确地分类到其他类别的总样本数，\text{TN}表示其他类别被正确地分类到其他类别的总样本数。
+
+
+\subsection{实验参数设置}
+\subsection{对比实验设置与结果分析}
+为了验证本章提出方法的有效性，本节在自建数据集AECR-Twitter，Twitter-15 和Twitter-17数据集上，与以下几种相关基线模型进行了对比实验：
+\begin{itemize}
+  \item ITM\cite{yu2022targeted}：该方法提出了粗粒度与细粒度图像-aspect 对齐的多任务学习框架。由于 ITM 原本使用 Yu 等人提出的 aspect-image 相关性数据集来进行基于 aspect 的跨模态关系推理，我们在“ITM + Our AECR”中将其替换为我们的 AECR-Twitter 数据集，用于训练跨模态关系推理模块。
+  \item HIMT\cite{yu2022hierarchical}：该方法分层交互式多模态 Transformer 模型。在“HIMT + Our AECR”中，我们将跨模态关系推理模块集成到 HIMT 中，以获取图像与 aspect 之间的相关性权重。
+  \item DPFN\cite{wang2023dual}：该方法双视角融合网络，用于同时建模特定 aspect 相关的全局与局部细粒度情感信息。在“DPFN + Our AECR”中，我们采用与“HIMT + Our AECR”相同的方式注入我们的相关性信息。
+  \item A2II \cite{feng2024autonomous}：一种生成式模型，通过利用语言-视觉大模型(LVLMs)解决多模态融合的局限，并通过指令微调减轻无关图像噪声的影响。在“A2II + Our AECR”中，我们使用基于 AECR-Twitter 数据集微调后的 Qwen2-VL-7B 模型生成的关系感知知识，替换其原本由 InstructBlip-Flan-T5-xl \cite{NEURIPS2023_9a6a435e}模型生成的知识。
+  \item Qwen2-VL \cite{wang2024qwen2}：一种广泛使用的 LVLM，表现出良好的性能。“Qwen2-VL + Our AECR”表示在指令中注入我们的关系感知知识。
+  \item Qwen2.5-VL \cite{bai2025qwen2}：Qwen2-VL 的升级版本，具有更强的视觉-语言对齐能力与推理能力。“Qwen2.5-VL + Our AECR”沿用与“Qwen2-VL + Our AECR”相同的关系感知知识注入策略。
+  \item AoM \cite{zhou2023aomdetectingaspectorientedinformation}：该方法面向 aspect 的方法，通过图卷积网络(GCN)在句法依存条件下融合语义与情感特征。“AoM + Our AECR”指采用与“A2II + Our AECR”相同的策略，将我们的关系感知知识注入 AoM 中。
+  \item DQPSA \cite{peng2024novel}：该方法通过双查询提示实现视觉-文本对齐，并使用能量模型进行 span 边界配对。在“DQPSA + Our AECR”中，我们采用与“A2II + Our AECR”相同的方式，将我们提出的关系感知知识注入 DQPSA。
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\caption{\label{mainresult}
+  对比实验结果
+   }
+\begin{tabular}{llcccccc}
+
+\toprule
+\multicolumn{1}{l}{\multirow{2}{*}{\textbf{Methods}}} & \multicolumn{2}{c}{\makecell[c]{\textbf{Twitter-15}}}
+                 & \multicolumn{2}{c}{\makecell[c]{\textbf{Twitter-17}}} 
+                 & \multicolumn{2}{c}{\makecell[c]{\textbf{AECR-Twitter}}} \\
+\multicolumn{1}{c}{} & ACC & F1 & ACC & F1  & ACC & F1 \\ \hline
+ITM & $77.78$ & $73.44$ & $71.64$ & $70.27$  & $71.72$  & $67.23$ \\
+ITM+Our AECR & $78.36_{\pm 0.20}^{\dagger}$  & $74.09_{\pm 0.11}^{\dagger}$   &  $72.93_{\pm 0.91}^{\dagger}$ &  $71.86_{\pm 0.76}^{\dagger}$ &  $73.31_{\pm 0.39}^{\dagger}$ &  $69.17_{\pm 0.55}^{\dagger}$ \\
+
+HIMT & $76.01$ & $71.46$ & $67.77$ & $65.34$ &  $68.31$ & $62.05$ \\
+HIMT+Our AECR & $76.37_{\pm 0.43}^{\diamond}$  & $72.01_{\pm 0.20}^{\dagger}$   &  $68.82_{\pm 0.12}^{\dagger}$ &  $66.88_{\pm 0.18}^{\dagger}$ &  $69.94_{\pm 1.18}^{\dagger}$ &  $63.88_{\pm 0.12}^{\dagger}$ \\
+
+DPFN & $76.75$ & $71.72$ & $70.06$ & $68.68$ & $66.29$ & $65.96$ \\
+DPFN+Our AECR & $76.53_{\pm 0.31}^{\diamond}$  & $72.46_{\pm 0.37}^{\dagger}$   &  $71.12_{\pm 0.40}^{\dagger}$ &  $69.38_{\pm 0.32}^{\dagger}$ &  $71.06_{\pm 1.20}^{\dagger}$ &  $70.85_{\pm 1.21}^{\dagger}$ \\
+
+A2II & $76.61$ & $72.70$ & $72.96$ & $71.37$ & $71.15$ & $66.96$ \\
+A2II+Our AECR & $77.77_{\pm 0.07}^{\dagger}$ & $73.13_{\pm 0.35}^{\dagger}$ & $74.11_{\pm 0.38}^{\dagger}$ & $72.74_{\pm 0.38}^{\dagger}$ & $72.19_{\pm 0.48}^{\dagger}$ &  $68.63_{\pm 0.67}^{\dagger}$ \\
+
+Qwen2-VL & $77.91$ & $73.41$ & $72.69$ & $71.07$ & $71.91$ & $67.12$ \\
+Qwen2-VL+Our AECR & $79.36_{\pm 0.72}^{\dagger}$  & $74.25_{\pm 0.36}^{\dagger}$   &  $73.39_{\pm 0.12}^{\dagger}$ &  $72.61_{\pm 0.29}^{\dagger}$ &  $73.68_{\pm 1.13}^{\dagger}$ &  $70.06_{\pm 1.13}^{\dagger}$   \\
+
+Qwen2.5-VL & $77.62$ & $73.73$ & $74.31$ & $73.95$ & $72.75$ & $68.30$ \\
+Qwen2.5-VL+Our AECR & $78.73_{\pm 0.07}^{\dagger}$ & $74.19_{\pm 0.07}^{\dagger}$ & \bm{$74.55_{\pm 0.11}^{\dagger}$} &  \bm{$74.40_{\pm 0.36}^{\dagger}$} &  $73.87_{\pm 0.28}^{\dagger}$ &  $71.10_{\pm 0.02}^{\dagger}$ \\
+
+AoM & $77.90$ & $73.84$ & $73.52$ & $72.38$ & $73.37$ & $70.17$ \\
+AoM+Our AECR & $78.52_{\pm 0.23}^{\dagger}$  & $75.08_{\pm 0.25}^{\dagger}$   &  $74.02_{\pm 0.09}^{\dagger}$ &  $72.92_{\pm 0.31}^{\dagger}$ &  \bm{$74.15_{\pm 0.24}^{\dagger}$} &  \bm{$72.05_{\pm 0.40}^{\dagger}$} \\
+
+DQPSA & $80.80$ & $80.80$ & $71.88$ & $71.88$ & $71.34$ & $71.34$ \\
+DQPSA+Our AECR & $\bm{81.65_{\pm 0.20}^{\dagger}}$
+  & $\bm{81.65_{\pm 0.20}^{\dagger}}$&  $72.89_{\pm 0.29}^{\dagger}$ &  $72.89_{\pm 0.29}^{\dagger}$ &  $72.28_{\pm 0.42}^{\dagger}$ &  $72.28_{\pm 0.42}^{\dagger}$ \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+表 \ref{mainresult}展示了各模型在 Twitter-15、Twitter-17 以及 AECR-Twitter 数据集上的多模态方面级情感分类(MASC)主要实验结果。其中，ITM、HIMT、DPFN、A2II、AoM 和 DQPSA 的实验结果均由我们重新实现。符号 † 表示该模型与引入 Our AECR 后的对应模型之间的性能差异在显著性水平 p<0.01下具有统计显著性，而符号 ◊ 表示差异不显著(p>0.05)。
+
+实验结果表明，在引入我们提出的情感感知跨模态相关性后，所有模型均取得了稳定且一致的性能提升。尤其是在当前两种先进方法 AoM 和 DQPSA 上，同样观察到了显著的性能增益，充分验证了所提出相关性建模方法的有效性。我们将性能提升主要归因于跨模态关系推理模块与所提出相关性建模机制的协同作用：一方面，该关系推理模块能够有效帮助现有 MASC 方法抑制无关图像带来的干扰，从而提升情感分析性能；另一方面，我们提出的相关性不仅能够建模文本 aspect 与图像之间的显式对齐关系，还能够捕获二者之间隐式的情感关联，使得 aspect–image 相关性建模更加全面。
+
+此外，Qwen2.5-VL 与 DQPSA 相较于其他模型表现出更为优越的性能，这主要得益于语言–视觉大模型(LVLMs)所具备的强大多模态理解能力以及视觉-语言预训练任务的有效性。在此基础上，引入我们提出的跨模态相关性进一步提升了 Qwen2.5-VL 和 DQPSA 的性能，进一步验证了情感感知跨模态相关性在增强 MASC 性能方面的有效性。在 Twitter-15 数据集上，DQPSA 的性能优于 Qwen2.5-VL。我们认为，这一优势来源于其在预训练阶段采用了基于提示的图像理解机制，使模型能够更加精准地关注与给定 aspect 相关的图像区域，从而实现更准确的情感预测。相比之下，“Qwen2.5-VL + Our AECR”在 Twitter-17 数据集上取得了更优的结果，这主要归因于其更强的泛化能力。然而，在 AECR-Twitter 数据集上，Qwen2.5-VL 的表现仍略逊于 AoM 和 DQPSA，这可能是由于 Qwen2.5-VL 需要更多训练数据才能充分适配任务，而 AoM 与 DQPSA 在小规模数据集上更具优势。
+
+总体而言，我们提出的情感感知跨模态相关性在所有模型架构上均带来了稳定一致的性能提升，充分体现了其在捕获隐式情感关联以及提升多模态方面级情感分析性能方面的鲁棒性与有效性。
+
+ 
+ 
+\begin{table}[htbp]
+  \centering
+    \caption{消融实验结果}
+    \label{tab:Ablation}
+\begin{tabular}{lll}
+\toprule
+   \multirow{2}{*}{\textbf{Methods}} & \multicolumn{2}{c}{\textbf{AECR-Twitter}} \\
+    & ACC & F1   \\
+    \hline
+    Complete Model& \textbf{73.31}&\textbf{69.17} \\    
+    ~~~~without ``Irrelevant'' type & 63.34  &57.69  \\
+    ~~~~without ``Emotional expression source'' type & 72.46  &68.44  \\
+    ~~~~without ``Enhancing emotional expression'' type& 71.62  &67.36  \\
+    ~~~~without ``Semantically related but emotional irrelevant'' type& 71.20  &67.05  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{消融实验分析}
+为了更好地理解每种关系类型的贡献，如表\ref{tab:Ablation}所示，我们在AECR-Twitter数据集上进行了一项消融实验，每次省略一个跨模态关系类型，并对比实验结果，具体见表格。 "Complete Model"表示包含所有四种关系类型的MASC模型，而“without x type”则表示在执行MASC时忽略了关系类型x。需要注意的是，在消融实验中，训练集的大小保持不变。当去除某个关系类型时，我们保留完整数据集用于训练MASC任务，同时在基于方面的跨模态关系推断任务中屏蔽该类型的监督信号。
+
+表格\ref{tab:Ablation}展示了消融实验的结果。我们首先观察到，去除任何一种关系类型都会导致相较于“Complete Model”的一致性性能下降，这表明所有关系类型都对MASC任务有积极贡献。特别地，去除“无关”类型会导致最显著的性能下降。我们将其归因于社交媒体中普遍存在的弱图像-文本对齐现象，排除这类样本会严重削弱模型过滤跨模态噪声的能力。此外，去除“增强情感表达”和“语义相关但情感无关”类型会导致显著下降。这突出了这两种类型的重要作用：前者通过视觉上的隐性情感线索强化了文本情感表达，而后者则帮助模型区分情感相关性与语义相关性，有效捕捉图像中的关键信息。去除“情感表达来源”类型对性能的影响较小。这可能是因为该类型在数据集中占比较低，导致模型未能充分学习该类型的模式。
+
+\begin{table}[htbp]
+\centering
+\caption{\label{llm-result}
+  将跨模态相关性加入到LLMs中在Twitter-15和Twitter-17上的结果}
+\begin{tabular}{lcccc}
+\toprule
+% \midrule
+\multicolumn{1}{l}{\multirow{2}{*}{\textbf{Methods}}} & \multicolumn{2}{c}{\textbf{Twitter-15}} & \multicolumn{2}{c}{\textbf{Twitter-17}} \\
+\multicolumn{1}{c}{} & ACC & F1 & ACC & F1 \\ \hline
+GPT-3.5-Turbo & 48.72 & 49.72 & 51.95 & 48.31 \\
+GPT-3.5-Turbo+Our AECR & 52.49 & 52.36 & 52.55 & 49.25 \\
+Qwen-Turbo & 65.19 & 59.80 & 57.37 & 54.57 \\
+Qwen-Turbo+Our AECR & 68.56 & 61.83 & 59.72 & 56.02 \\
+DeepSeek-V3 & 62.64 & 61.64 & 59.40 & 58.87 \\
+DeepSeek-V3+Our AECR & \textbf{66.12} & \textbf{63.67} & \textbf{62.53} & \textbf{61.29} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+  \includegraphics[width=0.7\textwidth]{fig/chp2/Figure5.pdf}
+\caption{Relevance-aware zero-shot prompt template.}
+\label{zero-shot}
+\end{figure}
+
+\subsection{在zero-shot场景下将跨模态相关性加入到LLMs中的性能}
+我们进一步通过zero-shot场景下的提示，探讨了我们提出的方面级情感跨模态关系在增强各种LLMs的能力方面的有效性。图 \ref{zero-shot} 显示了我们设计的提示模板。具体来说，任务定义概述了MASC任务，并解释了如何利用跨模态相关性进行MASC。在提示中，我们提供了方面、情感选项和推文中的句子。图像描述是从BLIP-Image和BLIP-VQA中提取的，依据 \cite{yang2024empirical}，并包含图像标题、视觉实体描述和视觉情感描述。对于跨模态关系，我们在AECR-Twitter数据集上微调了Qwen2-VL-7B模型，以生成跨模态关系感知的知识。我们评估了多种开源和闭源LLMs的MASC性能，包括DeepSeek-V3、GPT-3.5-Turbo和Qwen-Turbo。
+如表 \ref{llm-result} 所示，所有LLMs在zero-shot场景下融入跨模态关系感知知识后，均表现出一致的性能提升。这一观察表明，我们的关系感知知识提高了LLMs在MASC任务中的可靠性。特别地，开源LLMs DeepSeek-V3和Qwen-Turbo在两个数据集上都优于闭源的GPT-3.5-Turbo。
+
+
+\begin{figure}[t]
+\centering
+  \includegraphics[width=.7\textwidth]{fig/chp2/Figure6.pdf}
+  \caption {错误模式的统计分析。其中“Pos”、“Neu”和“Neg”分别代表正面、中性和负面}
+  \label{errorpattern}
+\end{figure}
+
+\subsection{错误模式分析}
+为了更好地理解我们方法所取得的改进，我们分析了在\cite{yu2022targeted}框架下，不同对比模型在错误模式上的变化。一个错误模式{X, Y}表示黄金情感标签“X”被错误地预测为“Y”或反之。图 \ref{errorpattern} 显示了Twitter-17数据集上的结果。我们观察到，在三种错误模式中，“{Neu, Pos}”和“{Neu, Neg}”的错误发生最为频繁，表明区分中性情感与积极或消极情感仍然是一个主要挑战。这些错误通常发生在图像中的情感线索模糊时，导致模型预测出更强的情感。通过引入我们的关系感知，模型能够更好地利用图像中的隐性情感线索，区分中性情感与其他两个情感标签。相比之下，“{Neg, Pos}”错误模式出现的频率最低，但通常涉及讽刺或冲突的多模态线索。例如，一条表达消极情感的推文可能伴随一张积极的图像，这可能会误导模型做出错误的预测。我们的方法通过对与方面无关的图像进行降权，减轻了这个问题，使模型能够更专注于讽刺性的文本线索。
+尽管我们的模型在处理这种类型的错误时比\cite{yu2022targeted}表现得更好，但仍略微不如基准模型。我们将在未来的工作中探讨合适的方法来解决这一类型的错误。
+
+\section{本章小结}  
+
+本章定义了方面级情感相关性，并基于相关性的定义构建了一个方面级情感跨模态相关性数据集（AECR-Twitter），该数据集包含3562个样本。本章详细描述了AECR-Twitter的构建过程，涵盖了从标注规范到人工标注数据的全部流程，为确保数据集的高质量，本研究采用严格的独立双重标注。此外本章对AECR-Twitter数据集进行深入的分析，包括标注一致性分析、相关性标签分布、与前人定义相关性比较以及相关性标签与情感标签的关系分布。同时为验证所提跨模态关系方案和AECR-Twitter数据集在下游多模态方面级情感分类任务中的有效性，本章探索并对比了多种将跨模态相关性信息融入多模态方面级情感分类的方法，包括轻量级多模态模型的相关性插件方法和通过prompt注入相关性的大型语言模型方式，在 Twitter-15 ，Twitter-17 和AECR-Twitter数据集的实验结果表明加入我们的提出的方面级情感相关性能够给给现有方法提供一致的性能提升，验证了我们提出的方面级情感相关性的有效性。此外，本章将对方面级情感相关性进行了详细的分析，包括相关性标签类型的消融实验，错误模式的分析，深入探索了方面级情感图文相关关系的特点。

@@ -1,0 +1,65 @@
+This is BibTeX, Version 0.99d (TeX Live 2025)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: sudathesis.bst
+A level-1 auxiliary file: content/abstract-zh.aux
+A level-1 auxiliary file: content/abstract-en.aux
+A level-1 auxiliary file: content/1.introduction.aux
+A level-1 auxiliary file: content/2.xxx.aux
+A level-1 auxiliary file: content/3.xxx.aux
+A level-1 auxiliary file: content/4.xxx.aux
+A level-1 auxiliary file: content/5.conclusion.aux
+A level-1 auxiliary file: content/achievement.aux
+A level-1 auxiliary file: content/thanks.aux
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 150 items from 100.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: reference.bib
+Warning--I didn't find a database entry for "li-2013-chinese-dep"
+Warning--I didn't find a database entry for "krahenbuhl-etal-2011-efficient"
+You've used 25 entries,
+            4952 wiz_defined-function locations,
+            1137 strings with 13955 characters,
+and the built_in function-call counts, 272651 in all, are:
+= -- 4502
+> -- 32744
+< -- 41044
++ -- 11167
+- -- 1764
+* -- 1507
+:= -- 37817
+add.period$ -- 75
+call.type$ -- 25
+change.case$ -- 50
+chr.to.int$ -- 10151
+cite$ -- 25
+duplicate$ -- 558
+empty$ -- 1583
+format.name$ -- 1261
+if$ -- 70675
+int.to.chr$ -- 2
+int.to.str$ -- 26
+missing$ -- 0
+newline$ -- 154
+num.names$ -- 75
+pop$ -- 14275
+preamble$ -- 1
+purify$ -- 25
+quote$ -- 0
+skip$ -- 29034
+stack$ -- 0
+substring$ -- 12135
+swap$ -- 33
+text.length$ -- 591
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 299
+warning$ -- 0
+while$ -- 697
+width$ -- 0
+write$ -- 356
+(There were 2 warnings)

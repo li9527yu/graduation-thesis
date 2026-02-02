@@ -1,0 +1,49 @@
+\contentsline {chapter}{\numberline {第一章\hspace {.3em}}绪论}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}研究背景和意义}{1}{section.1.1}%
+\contentsline {chapter}{\numberline {第二章\hspace {.3em}}图文情感相关性语料构建与数据分析}{2}{chapter.2}%
+\contentsline {section}{\numberline {2.1}引言}{2}{section.2.1}%
+\contentsline {section}{\numberline {2.2}图文情感相关性语料构建}{3}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}标注规范}{4}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}人工标注数据构建}{5}{subsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {1.}标注数据的选择}{6}{subsubsection.2.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.}标注工具}{6}{subsubsection.2.2.2.2}%
+\contentsline {subsubsection}{\numberline {3.}标注人员的招聘与培训}{6}{subsubsection.2.2.2.3}%
+\contentsline {subsubsection}{\numberline {4.}标注质量的控制}{7}{subsubsection.2.2.2.4}%
+\contentsline {section}{\numberline {2.3}方面级情感跨模态相关性数据集分析}{7}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}AECR标注一致性分析}{7}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}AECR标签分布}{8}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}与前人工作的标注比较}{8}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}情感标签与相关性标签关系分析}{9}{subsection.2.3.4}%
+\contentsline {section}{\numberline {2.4}融合跨模态方面级情感相关性的多模态情感分析}{10}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}任务定义}{10}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}现有MASC模型的通用架构}{10}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}跨模态情感相关性感知的的情感分类增强}{12}{subsection.2.4.3}%
+\contentsline {section}{\numberline {2.5}实验设置与结果分析}{13}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}评价指标}{13}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}实验参数设置}{14}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}对比实验设置与结果分析}{14}{subsection.2.5.3}%
+\contentsline {subsection}{\numberline {2.5.4}消融实验分析}{16}{subsection.2.5.4}%
+\contentsline {subsection}{\numberline {2.5.5}在zero-shot场景下将跨模态相关性加入到LLMs中的性能}{17}{subsection.2.5.5}%
+\contentsline {subsection}{\numberline {2.5.6}错误模式分析}{18}{subsection.2.5.6}%
+\contentsline {section}{\numberline {2.6}本章小结}{19}{section.2.6}%
+\contentsline {chapter}{\numberline {第三章\hspace {.3em}}第三章xx}{20}{chapter.3}%
+\contentsline {section}{\numberline {3.1}引言}{20}{section.3.1}%
+\contentsline {section}{\numberline {3.2}基于图文情感线索引导的多模态方面情感分类方法}{21}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}方面级情感跨模态相关性与图文情感线索描述数据集构建}{21}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}相关性引导的生成式框架}{22}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}相关性感知的提示构建}{22}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}编码器输入}{23}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}解码器输出和双流融合}{24}{subsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.2.6}损失函数}{24}{subsection.3.2.6}%
+\contentsline {section}{\numberline {3.3}实验设置与结果分析}{25}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}对比实验设置与结果分析}{25}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}消融实验分析}{26}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}相关性质量影响分析}{27}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}情感线索质量影响分析}{28}{subsection.3.3.4}%
+\contentsline {section}{\numberline {3.4}本章小结}{28}{section.3.4}%
+\contentsline {chapter}{\numberline {第四章\hspace {.3em}}第四章xx}{29}{chapter.4}%
+\contentsline {chapter}{\numberline {第五章\hspace {.3em}}总结与展望}{30}{chapter.5}%
+\contentsline {chapter}{参考文献}{31}{chapter.5}%
+\contentsline {chapter}{攻读学位期间的成果}{34}{chapter*.19}%
+\contentsline {chapter}{致谢}{35}{chapter*.20}%
+\contentsfinish 
