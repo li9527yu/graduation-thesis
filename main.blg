@@ -19,11 +19,9 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: reference.bib
-Warning--I didn't find a database entry for "li-2013-chinese-dep"
-Warning--I didn't find a database entry for "krahenbuhl-etal-2011-efficient"
 You've used 25 entries,
             4952 wiz_defined-function locations,
-            1137 strings with 13955 characters,
+            1135 strings with 13906 characters,
 and the built_in function-call counts, 272651 in all, are:
 = -- 4502
 > -- 32744
@@ -62,4 +60,3 @@ warning$ -- 0
 while$ -- 697
 width$ -- 0
 write$ -- 356
-(There were 2 warnings)
