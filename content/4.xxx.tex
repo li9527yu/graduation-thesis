@@ -1,32 +1,262 @@
-\chapter{第四章xx}
-第三章提出的图文情感线索引导的多模态情感分析通过引入细粒度的方面级跨模态情感相关性标签和单模态情感线索描述，进一步提升了多模态方面情感分类的性能，然而对于方面级跨模态情感相关性的利用中，我们认为现有的相关性同时考虑了情感相关性和语义相关性，但是针对于图像特征的使用并没有细粒度进行控制区分，因此我们提出将方面级跨模态情感相关性进行解耦为两个角度情感相关性和语义相关性，来分别控制图像中的语义特征和图像中的情感特征的细粒度使用，进一步增强多模态方面级情感分类的性能。同时，我们提出了单模态情感监督增强的预热训练方式，来帮助模型能够更好地理解文本和图像本身的情感。
+\chapter{多角度相关性解耦的多模态方面级情感分析}
+第三章提出的图文情感线索引导方法通过引入细粒度的方面级跨模态情感相关性标签和单模态情感线索描述，增强了模型对图文情感交互的理解，并利用细粒度相关性有效提升了多模态方面级情感分类的性能。然而该方法在处理图文关系时仍存在局限性：当模型依据图像信息时，往往结合了图像中的无关语义信息。这些无关的物体或场景信息作为视觉噪声对最终的情感判断产生干扰。为了实现对图像视觉特征的更精细化利用，本章提出将方面级跨模态情感相关性解耦为情感相关性和语义相关性两个独立维度。通过这种多角度的解耦策略，模型能够分别控制图像中语义特征和情感特征的权重，在过滤无关语义噪声的同时，针对性地增强有效情感特征的利用，从而进一步提升多模态方面级情感分类的性能。此外，本章还提出了基于单模态情感监督增强辅助任务，旨在增强模型对文本和图像自身情感内容的理解基础。
+
+
 \section{引言}
+第三章提出的方法通过引入细粒度的方面级跨模态情感相关性标签和单模态情感线索描述，有效地辅助了模型理解图文之间的情感语义关联，进而提升了多模态方面级情感分类任务的表现。然而，该方法对相关性的利用主要依赖于“情感相关”、“语义相关”和“图文无关”三种互斥的离散类别。虽然这种分类方式宏观上兼顾了情感与语义因素，但在细粒度的特征交互层面，尚未实现对图像情感特征与语义特征的独立解耦与控制。我们认为在处理复杂样本时，若不加区分地引入整幅图像特征，图像背景中夹杂的冗余语义信息往往会作为噪声掩盖关键的情感线索。
 
-第三章提出RC-EmoCLue方法通过引入细粒度的方面级跨模态情感相关性标签和单模态情感线索描述，有效的帮助模型理解图文之间的情感语义关联，进一步提升了多模态方面情感分类的性能。
-然而其对于方面级跨模态情感相关性的利用是将其分为三种类别：情感相关、语义相关、图文无关，我们认为提出方面级跨模态情感相关性同时考虑了情感角度和语义角度的图文相关关系，但是借助相关性对于图像特征的使用并从这两个角度进行细粒度地控制区分。
-本章考虑这个角度去进一步增强第三章的方法，通过挖掘更细分的方面级跨模态情感相关性，实现对于图像情感和语义特征的细粒度使用，从而提升模型对于图文内容的情感信息和语义信息的充分理解。基于该思路，我们将方面级跨模态情感相关性解耦为两个角度的相关性：情感相关性和语义相关性，来分别控制图像语义特征和图像情感特征的细粒度使用。对于图像情感特征和图像语义特征的提取，我们使用Q-former设置针对图像情感和图像语义的prompt来得到对应图像细粒度特征。同时，我们提出了两阶段的训练方式，首先是单模态情感监督增强的预热，通过将文本情感和图像情感作为多任务来帮助模型更好地理解文本和图像本身的情感。接着是多模态方面级情感分类和多角度相关性的多任务学习，同时训练两个任务，将多角度相关性输出的情感相关性和语义相关性作用于对应的图像特征，实现细粒度使用。
+针对上述局限性，本章致力于进一步优化图文相关性建模机制，通过挖掘深层次的方面级跨模态关联，实现对图像情感特征和语义特征的解耦与精细化利用，从而显著提升模型对图文内容中情感信息与语义信息的理解深度。基于该思路，我们将方面级跨模态相关性明确解耦为情感相关性和语义相关性两个独立视角，分别用于指导图像情感特征和图像语义特征的自适应加权与互补融合。在特征提取层面，本章利用多模态模型，通过设计针对性的文本指令作为引导信号，定向获取图像的细粒度情感特征与语义特征。
 
-本章提出的多角度多任务框架在twitter-15和twitter-17数据集的实验结果表明是有效的
-\section{xxxx的多模态情感分析}
-% 多任务定义、多角度相关性定义
-% 输入的样本 $\mathbf{x}$ 包含一条推文，该推文由文本-图像对及其对应的方面组成。其中，$x^t$、$x^i$ 和 $x^a$ 分别表示文本、图像和方面。
-% 特征抽取：
-% 1. 文本特征抽取：使用t5模型，将prompt，句子，方面对拼接作为输入，输入到t5模型中，获得文本的embedding表示。对应符号表示为$h^t = t5(x^t, x^a)$。
-% 2. 图像特征抽取：使用Q-former模型，我们使用两种不同的prompt，分别是情感prompt和语义prompt，来抽取图像中方面对应的语义特征和图像整体的情感特征。对应的符号表示为$h^s = Q-former(x^i, p^s)$和$h^e = Q-former(x^i, p^e)$，其中$p^s$和$p^e$分别是情感prompt和语义prompt。
-% 多任务：
-% 1. 文本情感监督：输入：$\mathbf{x} = (x^t, x^a)$，输出：情感标签 $y^t \in \{\textit{positive},  \textit{neutral},  \textit{negative}\}$，相关的表示和逻辑流程：prompt拼接，输入到t5模型，输出情感标签。目的是让模型理解文本中方面的情感信息。
-% 2. 图像情感监督：输入：$\mathbf{x} = (x^i, x^a)$，输出：情感标签 $y^i \in \{\textit{positive},  \textit{neutral},  \textit{negative}\}$，相关的表示和逻辑流程：prompt拼接输入t5中获得embedding表示，然后对于提取抽取得到的情感特征，使用一个全连接层映射再和t5的输入进行拼接，最后输入到t5模型中，输出情感标签。目的是让模型理解图像中方面的情感信息。
-% 3. 多角度相关性监督和融合，输入：$\mathbf{x} = (x^t, x^i, x^a)$，输出：情感相关性 $r^s \in \{\textit{relevant}, \textit{irrelevant}\}$ 和语义相关性 $r^e \in \{\textit{relevant}, \textit{irrelevant}\}$，相关的表示和逻辑流程：prompt拼接，输入到t5模型中，对于语义相关性，我们将抽取到的语义特征和文本特征进行拼接，然后输入到t5模型中，输出语义相关性。对于情感相关性，我们将抽取到的情感特征和文本特征进行拼接，然后输入到t5模型中，输出情感相关性。目的是让模型理解图文对中方面相关的情感相关性和语义相关性。
-% 4. 多模态方面级情感分类，输入：$\mathbf{x} = (x^t, x^i, x^a)$，输出：情感标签 $y \in \{\textit{positive},  \textit{neutral},  \textit{negative}\}$，相关的表示和逻辑流程：prompt拼接输入到t5模型中，然后对于计算得到情感相关性和语义相关性作为门控权重控制图像情感特征和语义特征的细粒度使用，接着我们将图像情感特征、图像语义特征还有T5文本输入拼接再一起，然后输入到t5模型中，输出情感标签。
+此外，为了确保模型具备稳健的多模态关联建模能力，本章提出了一种渐进式的两阶段训练框架。第一阶段设定为单模态情感监督和多角度相关性预测的辅助任务，作为预热训练阶段，通过将文本情感分类、图像情感分类和多角度相关性建模作为辅助监督信号，强化模型对单模态基础情感特征的识别能力以及对图文深层次关联的先验理解；第二阶段则开展以多模态方面级情感分类为主的多任务联合学习，利用解耦后的情感相关性和语义相关性概率分布，动态调节对应图像特征的介入程度，实现特征的细粒度控制。在Twitter-15和Twitter-17数据集上的实验结果表明，本章提出的基于多角度相关性解耦的多任务框架能够有效削减模态噪声，提升模型的分类性能。
 
+
+\section{基于多角度相关性解耦的多模态方面级情感分析}
 % 训练过程：
 % 1. 单模态情感监督增强的预热训练：我们首先使用文本情感监督和图像情感监督作为多任务，来帮助模型更好地理解文本和图像本身的情感。训练过程中，我们使用交叉熵损失函数来优化模型参数。
 % 2. 多模态方面级情感分类和多角度相关性的多任务学习：在预热训练完成后，我们将多模态方面级情感分类和多角度相关性监督和融合作为多任务，来训练模型。训练过程中，我们使用交叉熵损失函数来优化模型参数。
 
+% (Dynamic Multi-Level Relevance Decoupling Framework for Multimodal Aspect-Based Sentiment Analysis)
+本章提出一种基于多角度相关性解耦的多模态方面级情感分析框架如图所示\ref{four:method}。该框架包含多模态特征解耦抽取、多角度相关性建模、单模态情感监督以及自适应融合推理四个核心模块。为提取细粒度的图像情感与语义特征，模型采用多模态理解组件，通过构造特定的自然语言指令，实现了语义导向特征与情感导向特征的精细化分离。针对上一章章节获取的细粒度方面级跨模态情感相关性标签，框架将其进一步解耦为情感相关性与语义相关性，并结合文本特征，利用两个独立网络分别预测图像在内容与情感层面与方面词的相关性。预测得到的概率作为门控信号，对细粒度视觉特征进行动态加权。此外，为增强模型对单模态情感信息的理解，本文引入文本与图像情感分类作为辅助任务，利用图文情感线索中的单模态标签进行监督训练。最终，经过门控过滤的视觉特征与文本特征深度融合，输入生成式模型以预测最终情感标签。
+% 该框架采用两阶段训练策略：第一阶段为预热阶段，冻结预训练语言模型主干，仅训练特征投影层与相关性判别头；第二阶段为联合微调阶段，解冻所有参数进行端到端优化。以下各节将对各模块进行详细阐述。
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{fig/chp4/method4.pdf} 
+  \caption {DMRD-MASC架构概览}
+  \label{four:method}
+\end{figure}
+
+\subsection{多模态特征解耦抽取}
+对于输入样本 $x=\{x^t,x^a,x^i\}$ 及情感标签 $y$，文本模态的处理方式与3.2.4节一致，即采用预训练 T5 模型对文本进行编码，获取 Embedding 表示 $E^t = \text{T5}(x^t, x^a)$。在图像模态方面，本小节采用预训练 InstructBLIP 模型提取与方面词相关的细粒度视觉特征。InstructBLIP 创新性地引入了Q-Former(Querying Transformer) 组件作为连接视觉与语言模态的桥梁。类似于 Transformer 在自然语言处理中的作用，Q-Former 包含一组可学习的 Query 向量，这些向量通过交叉注意力机制与冻结的图像编码器输出进行交互，从而捕捉关键的视觉信息。更为关键的是，Q-Former 具备指令跟随能力，能够将自然语言文本作为条件输入引入特征提取过程。与传统视觉模型生成固定、通用的图像表征不同，Q-Former 能够根据不同的文本提示词，动态调整注意力权重，从图像中选择性地感知并提取与指令语义高度对齐的局部特征。基于此特性，本文通过构造差异化的指令，分别引导 Q-Former 聚焦于图像的客观语义内容与主观情感线索，从而实现视觉信息的精细化解耦。
+
+具体来说，在图像语义特征提取阶段，以图像 $x^i$ 和方面词 $x^a$ 为输入，构造语义提取提示词 $P_{sem}$（具体为 “Task: Describe the aspects related to {$x^a$} in the image: {$x^i$}”）。通过将方面词嵌入模板，利用 Q-Former 提取语义导向的视觉特征：
+
+\begin{equation}
+\mathbf{V}_{sem} = \mathrm{Q\text{-}Former}(x^i, P_{sem})
+\end{equation}
+
+同样地，针对图像情感特征，构造提示词 $P_{emo}$（具体为 “Task: Analyze the emotional relevance of aspect {$x^a$} in the image: {$x^i$}”），进而提取情感导向的视觉特征：
+
+\begin{equation}
+\mathbf{V}_{emo} = \mathrm{Q\text{-}Former}(x^i, P_{emo})
+\end{equation}
+% ”Task: Analyze the semantic relevance of aspect {$x^a$} in the image and text: {$x^s$}“和情感相关性输入为:”Task: Analyze the emotional relevance of aspect {$x^a$} in the image and text: {$x^s$}“
+
+\subsection{多角度相关性建模}
+\textbf{多角度相关性定义。}为充分挖掘细粒度的跨模态相关性，我们将关联性解耦为语义与情感两个维度，分别控制不同层面视觉特征的利用率。具体定义了两个二值标签：语义相关性 $y_{sem}^* \in \{0, 1\}$ 用于指示图像在语义层面是否与方面词 $x^a$ 相关；情感相关性 $y_{emo}^* \in \{0, 1\}$ 则指示图像在情感表达层面是否与方面词相关。相关性判别网络的训练利用前序章节生成的解耦伪标签作为监督信号，分别对两个维度的相关性进行预测。
+
+\textbf{多角度相关性分类。}本节采用双分支分类器显式建模图文间的语义与情感相关性，并据此构建动态门控机制。首先构造相关性判别提示词，语义相关性输入 $P_{relSem}$ 设定为 “Task: Analyze the semantic relevance of aspect {$x^a$} in the image and text: {$x^s$}”，情感相关性输入 $P_{relEmo}$ 设定为 “Task: Analyze the emotional relevance of aspect {$x^a$} in the image: {$x^i$}”。提示词经 T5 模型编码及平均池化后，得到文本特征向量 $\bar{\mathbf{T}}_{sem}$ 和 $\bar{\mathbf{T}}_{emo}$。
+
+与此同时，Q-Former 提取的原始视觉特征 $\mathbf{V}_{sem}$ 和 $\mathbf{V}_{emo}$ 经由多层感知机 (MLP) 进行维度对齐，生成特征矩阵：
+\begin{equation}
+\mathbf{V}_{relSem} = \text{MLP}_{sem}(\mathbf{V}_{sem}) \in \mathbb{R}^{N_q \times d}
+\end{equation}
+\begin{equation}
+\mathbf{V}_{relEmo} = \text{MLP}_{emo}(\mathbf{V}_{emo}) \in \mathbb{R}^{N_q \times d}
+\end{equation}
+其中 $d$ 为隐藏层维度。对特征矩阵进行平均池化得到全局视觉向量 $\bar{\mathbf{V}}_{relSem}$ 和 $\bar{\mathbf{V}}_{relEmo}$ 后，将其与对应的文本向量拼接，输入二分类器预测相关性概率：
+
+\begin{equation}
+p_{sem} = \sigma(\text{MLP}_{cls}^{sem}([\bar{\mathbf{T}}_{sem}; \bar{\mathbf{V}}_{relSem}])) \in (0, 1)
+\end{equation}
+\begin{equation}
+p_{emo} = \sigma(\text{MLP}_{cls}^{emo}([\bar{\mathbf{T}}_{emo}; \bar{\mathbf{V}}_{relEmo}])) \in (0, 1) 
+\end{equation}
+上述概率值作为广播机制下的门控信号，对原始特征矩阵进行加权处理：
+\begin{equation}
+\tilde{\mathbf{V}}_{sem} = p_{sem} \cdot \mathbf{V}_{sem}
+\end{equation}
+\begin{equation}
+\tilde{\mathbf{V}}_{emo} = p_{emo} \cdot \mathbf{V}_{emo}
+\end{equation}
+当预测为高相关时，模型倾向于保留对应的细粒度视觉特征，反之则抑制其输入。训练过程中，模型最小化二元交叉熵损失。语义相关性损失 $\mathcal{L}_{sem}$ 与情感相关性损失 $\mathcal{L}_{emo}$ 定义如下：
+\begin{equation}
+    \mathcal{L}_{sem} = - \left[ y_{sem}^* \log p_{sem} + (1 - y_{sem}^*) \log (1 - p_{sem}) \right]
+\end{equation}
+\begin{equation}
+    \mathcal{L}_{emo} = - \left[ y_{emo}^* \log p_{emo} + (1 - y_{emo}^*) \log (1 - p_{emo}) \right]
+\end{equation}
+多角度相关性建模的总损失函数为两者之和：
+\begin{equation}
+    \mathcal{L}_{rel} = \mathcal{L}_{sem} + \mathcal{L}_{emo}
+\end{equation}
+
+\subsection{单模态情感监督}
+为增强模型对单模态信息的捕捉能力，本章引入文本方面级情感分类与图像情感分类作为预热阶段的辅助任务。通过联合训练多模态主任务与单模态辅助任务，模型能更有效地理解各模态独立携带的情感信息。辅助任务被设定为标准的三分类问题，并利用第三章获取的单模态情感线索标签（$y_{txt}$ 和 $y_{img}$）作为监督信号。
+
+在文本分支中，构造输入 $P_{txt}$ 为 “Task: Identify sentiment based on text. Sentence: {$x^s$} Aspect: {$x^a$} Output:”。该输入经 T5 编码后得到特征 $\mathbf{H}_{txtEmo}$：
+\begin{equation}
+H_{txtEmo}=T5(P_{txt})
+\end{equation}
+随后通过 Softmax 层预测情感分布，并计算交叉熵损失：
+\begin{equation}
+    p(y_{txt}) = \text{Softmax}(\mathbf{W}_{txt} \mathbf{H}_{txtEmo} + \mathbf{b}_{txt})
+\end{equation}
+\begin{equation}
+    \mathcal{L}_{txt} = - \log p(y_{txt}^*)
+\end{equation}
+
+在图像分支中，构造输入 $P_{img}$ 为 “Task: Identify sentiment based on image. Aspect: {$x^a$} Output:”。图像特征 $\mathbf{V}_{emo}$ 首先经过 MLP 映射得到 $\mathbf{V}_{imgEmo}$：
+\begin{equation}
+  \mathbf{V}_{imgEmo} = \text{MLP}_{imgEmo}(\mathbf{V}_{emo}) 
+\end{equation}
+该特征作为前缀嵌入，与文本特征拼接后输入 T5 模型，获取图像情感分类特征 $\mathbf{H}_{imgEmo}$：
+\begin{equation}
+H_{imgEmo}=T5(P_{img},\mathbf{V}_{imgEmo})
+\end{equation}
+同理，利用该特征预测情感分布并计算辅助损失：
+\begin{equation}
+    p(y_{img}) = \text{Softmax}(\mathbf{W}_{img} \mathbf{H}_{imgEmo} + \mathbf{b}_{img})
+\end{equation}
+\begin{equation}
+    \mathcal{L}_{img} = - \log p(y_{img}^*)
+\end{equation}
+单模态情感监督的总辅助损失为：
+\begin{equation}
+    \mathcal{L}_{aux} = \mathcal{L}_{txt} + \mathcal{L}_{img}
+\end{equation}
+
+\subsection{自适应融合推理}
+基于预测的相关性概率 $p_{sem}$ 和 $p_{emo}$，模型动态调整视觉特征权重以实现自适应融合。多模态主任务的文本输入 $P_{fuse}$ 构造为 “Task: Combining information from image and sentence to identify the sentiment of aspect {$x^a$} in the sentence {$x^s$}”。文本经 T5 Embedding 层得到表示 $\mathbf{E}_f$。将门控加权后的细粒度视觉特征 $\tilde{\mathbf{V}}_{sem}$ 和 $\tilde{\mathbf{V}}_{emo}$ 作为前缀与文本表示拼接，输入 T5 模型获取最终特征：
+
+\begin{equation}
+\mathbf{H}_{fuse} = \text{T5}([\tilde{\mathbf{V}}_{sem}; \tilde{\mathbf{V}}_{emo}; \mathbf{E}_{f}])
+\end{equation}
+该机制有效实现了图像情感与语义特征的自适应融合。在训练阶段，融合表示 $\mathbf{H}_{fuse}$ 输入 Softmax 层预测情感标签 $y$ 的概率分布：
+\begin{equation}
+    p(y) = \text{Softmax}(\mathbf{W}_{fuse} \mathbf{H}_{fuse} + \mathbf{b}_{fuse})
+\end{equation}
+主任务目标函数为最大化真实标签概率的交叉熵损失：
+\begin{equation}
+    \mathcal{L}_{main} = - \log p(y)
+\end{equation}
+
+\subsection{多任务损失函数}
+本章提出的框架涵盖主任务损失 $\mathcal{L}_{main}$、多角度相关性损失 $\mathcal{L}_{rel}$ 以及单模态辅助监督损失 $\mathcal{L}_{aux}$。为平衡多任务学习中的梯度冲突与收敛速度差异，引入基于同方差不确定性的自动加权策略\cite{kendall2018multi}，总损失函数定义为：
+
+\begin{equation}
+\mathcal{L}_{total} = \frac{1}{2\sigma_1^2} \mathcal{L}_{main} + \frac{1}{2\sigma_2^2} \mathcal{L}_{rel} + \frac{1}{2\sigma_3^2} \mathcal{L}_{aux} + \sum_{i=1}^{3} \log \sigma_i
+\end{equation}
+其中 $\sigma_i$ 为各任务模块的可学习不确定性参数。当某任务的观测噪声较大（即 $\sigma_i^2$ 增大）时，其损失权重将自动降低。
+
 \section{实验设置与结果分析}
-\subsection{对比实验设置与结果分析}
 % 超参数设置：学习率、训练过程、批量大小、优化器、损失函数等。
-\subsection{主要实验结果}
+\subsection{实验参数设置}
+本章沿用了与第三章一致的文本编码器、图像编码器、优化器配置及评价指标。针对两阶段训练策略，第一阶段冻结预训练语言模型主干，仅训练特征投影层与相关性判别头，并利用单模态情感监督辅助任务对模型进行预热。该阶段学习率设定为 1e-3，训练轮次为 5 轮，旨在使模型掌握文本和图像的基础情感特征。第二阶段则解冻所有参数进行端到端优化，学习率调整为 5e-5，训练轮次设为 10 轮。此外，损失函数中可学习不确定性参数的初始值设为 1，以支持模型在训练过程中根据各任务收敛难度自适应调整权重。
+
+\subsection{对比实验设置与结果分析}
+
+\begin{table}[t]
+\centering
+\caption{\label{four:mainresult}
+    对比实验结果
+    }
+\begin{tabular}{l|llll}
+\toprule
+\multirow{2}{*}{\textbf{Methods}} & \multicolumn{2}{l}{\textbf{Twitter-15}} & \multicolumn{2}{l}{\textbf{Twitter-17}} \\
+   & ACC                 & F1                 & ACC                 & F1                 \\ \hline
+ITM                               & 78.36               & 74.09              & 72.93               & 71.86              \\
+HIMT                              & 76.37               & 72.01              & 68.82               & 66.88              \\
+DPFN                              & 76.53               & 72.46              & 71.12               & 69.38              \\
+Aom                               & 77.9                & 73.84              & 73.52               & 72.38              \\
+Qwen2-VL-7B                       & 79.36               & 74.25              & 73.39               & 72.61              \\
+Qwen2.5-VL-7B                     & 77.62               & 73.73              & 74.31               & 73.95              \\
+\hline
+EC-EGC        &  77.91        & 75.27             & 74.80   & 74.36         \\ 
+Our Method        &  \textbf{79.41}       & \textbf{76.83}              & \textbf{75.84}                & \textbf{75.61}              \\ 
+\bottomrule
+\end{tabular}%
+\end{table}
+
+为了验证我们提出的多角度多任务框架的有效性，我们在Twitter-15和Twitter-17数据集上进行了对比实验。并对比了如下方法：
+
+- ITM、HIMT、DPFN、Aom、Qwen2-VL等：这些方法在上一章工作中已经介绍过，在此不再赘述。
+
+- EC-EGC：该方法是第三章提出的图文情感线索引导的多模态情感分析方法，通过引入细粒度的方面级跨模态情感相关性标签和单模态情感线索描述。
+
+- Our Method：该方法是我们提出的多角度多任务框架，通过将方面级跨模态情感相关性解耦为情感相关性和语义相关性，来分别控制图像情感特征和图像语义特征的细粒度使用。
+
+根据表\ref{four:mainresult}，我们可以看出Our Method在两个数据集上均取得了显著的性能提升。这一结果表明了Our Method在细粒度控制图像情感特征和图像语义特征的使用上，能够更好地理解图文对中方面相关的情感相关性和语义相关性，从而提升多模态方面级情感分类的性能。
+
+
 \subsection{消融实验分析}
+% 消融实验：对比不同组件的效果
+为了验证我们提出的多角度多任务框架的有效性，在Twitter-15和Twitter-17数据集上进行了消融实验。消融实验对比了如下组件的效果：
+
+- w/o Multi-level Relation Component：表示完全移除了多角度相关性建模部分和相关性融合作用于图像特征部分，仅保留了单模态情感监督部分。
+
+- w/o Unimodal Sentiment Supervision Component：表示完全移除了单模态情感监督部分，仅保留了多角度相关性建模部分和相关性融合作用于图像特征部分。
+
+- w/o Unimodal Sentiment Supervision Component：表示完全移除了单模态情感监督和多角度相关性建模部分。
+
+实验结果如表\ref{four:Ablation}所示，可以得出如下结论：
+
+(1) 移除任意模块后模型的ACC和F1均会下降，验证了单模态情感监督和多角度相关性建模均可以帮助模型更好地理解图文对中方面的情感。当所有组件均移除时，模型性能最低，说明加入多角度相关性和单模态监督能够让模型更好地理解图文对。
+
+(2) 与移除单模态情感监督的实验相比，移除多角度相关性的实验导致了模型显著的性能衰退。这一结果表明，单纯依赖单模态特征无法充分捕捉社交媒体语境下的复杂语义。多角度相关性模块通过挖掘文本与图像间的深层语义和情感关联，能够帮助模型更好地理解和利用这一关联来控制细粒度图像特征的使用，从而提升多模态情感分类的性能。
+
+(3) 移除单模态情感监督后，模型性能同样出现了不同程度的下滑。这说明在多任务学习框架下，单模态的辅助监督信号能够有效规范特征学习空间，帮助模型分别理解好文本和图像各自的情感。防止模型在处理复杂的多模态交互时丢失原始模态的情感倾向信息，从而提升了模型的整体鲁棒性。
+\begin{table}[t]
+  \centering
+    \caption{消融实验结果}
+    \label{four:Ablation}
+\begin{tabular}{lllll}
+\toprule
+\multirow{2}{*}{Model Name} & \multicolumn{2}{l}{Twitter-15} & \multicolumn{2}{l}{Twitter-17} \\
+                            & ACC            & F1             & ACC             & F1            \\
+    \hline
+Our Method              & \textbf{79.41}       & \textbf{76.83}              & \textbf{75.84}                & \textbf{75.61}              \\
+~~~~w/o Multi-level Relation  & 77.44		  &   74.63	       &     73.64	     &  73.47      \\
+~~~~w/o Unimodal Sentiment Supervision  &77.93 & 		75.21	 	&74.19 	 	 & 	74.09  \\
+~~~~w/o Unimodal Sentiment Supervision\& Multi-level Relation  & 76.60 &72.70& 72.96 &71.37 \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{相关性分析}
+
+为了验证本章提出的多角度相关性的有效性，并探究不同粒度的相关性监督信号对模型性能的具体影响，本节在 Twitter-15 和 Twitter-17 两个数据集上进行了深入的对比实验。在完整的方法上设计了针对相关性的对比实验。包含以下四种设置：
+
+-多角度相关性(Multi-level Relevance)：即本章提出的完整方法，将本研究定义的方面级跨模态情感相关性解耦为情感相关性和语义相关性，分别控制图像情感特征和图像语义特征的细粒度使用。
+
+-粗粒度相关性(Coarse-grained Relevance)：仅考虑图像和方面是否相关。
+
+-细粒度相关性(Fine-grained Relevance)：将图文情感相关性分类为情感相关、语义相关和图文无关三种情况。
+
+-忽略考虑相关性(w/o Relevance)：在本章的方法中忽略考虑相关性的建模即对应仅使用单模态情感监督任务，不引入多角度相关性建模和相关性融合作用于图像特征的交互模块。
+
+实验结果如表 \ref{four:relation} 所示，可以得出以下结论：本章提出的多角度相关性即(Multi-level Relevance) 策略在两个数据集的所有指标上均取得了最优性能。我们认为这是以为引入特征解耦和方面级跨模态相关性解耦使得模型能够精确地分辨图像在语义层面和情感层面两个独立维度上的贡献。这种细粒度的控制使得模型在面对图文弱相关或存在视觉噪声的样本时，能够保留有益的视觉特征，从而大幅提升了多模态融合的鲁棒性。另外，粗粒度相关性策略(Coarse-grained Relevance)的性能反而低于忽略相关性(w/o Relevance)的模型。这是因为粗粒度策略强制使用同一个标量权重去同时控制图像的语义特征和情感特征。然而图像往往可能语义相关但情感无关，或者情感相关但语义无关如使用通用表情包。粗粒度的的约束会导致模型在保留语义信息的同时引入情感噪声，或在过滤噪声的同时丢失关键语义线索。对比细粒度相关性(Fine-grained Relevance)其性能显著优于粗粒度模型和基准模型。这表明区分语义和情感维度的必要性。然而，细粒度策略仍落后于本章的多角度策略。这是因为本章的多角度相关性策略将语义门控和情感门控视为两个独立任务实现了特征级别的软性解耦，从而提供了更灵活的特征融合。
+
+% 对比粗粒度与细粒度相关性的实验结果表明，精细化的相关性建模对于提升模型性能至关重要。在F1指标上，细粒度相关性设置在两个数据集中均取得了最优结果。我们认为二元相关性判定不足以捕捉复杂图文对中情感关联，而细粒度相关性能够识别情感相关的图文对保留对情感分类有贡献的关键模态线索。另外通过引入不同比例的噪声干扰，我们观察到模型性能呈现出明显的下降趋势。当引入 20\% 的噪声时，模型在两个数据集上的 F1 值均出现了下滑；而当噪声比例增加至 50\% 时，性能损失进一步扩大。说明了模型对相关性质量的依赖，进一步验证了本文所提出的相关性控制模块在保证图文特征对齐质量方面的核心作用。
+
+
+\begin{table}[t]
+  \centering
+    \caption{相关性分析结果}
+    \label{four:relation}
+\begin{tabular}{lllll}
+\toprule
+\multirow{2}{*}{Relevance Type} & \multicolumn{2}{l}{Twitter-15} & \multicolumn{2}{l}{Twitter-17} \\
+                            & ACC            & F1             & ACC             & F1            \\
+    \hline
+Multi-level Relevance              & \textbf{79.41}       & \textbf{76.83}              & \textbf{75.84}                & \textbf{75.61}              \\
+Fine-grained Relevance  & 77.81 & 	75.34 & 	74.11 & 	73.96 	     \\
+Coarse-grained Relevance  & 76.92	 &74.12 &	73.27	 &72.94	   \\
+w/o Relevance    & 77.44		  &   74.63	       &     73.64	     &  73.47        \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{样例分析}
+\begin{figure}[htbp]
+  \centering
+    \caption{样例分析结果}
+    \label{four:case}
+    \includegraphics[width=0.8\textwidth]{fig/chp4/case.pdf}
+\end{figure}
+
+为了直观验证本章方法(DMRD-MASC)在复杂多模态语境下的有效性，图\ref{four:case}展示了两个典型样例与第三章方法(RC-ECG)的预测对比。在第一个样中，文本字面偏中立但配图传达了强烈的负面情感，构成了一种语义无关但情感相关的表情包恶搞语境。RC-ECG方法因依赖细粒度相关性约束，在面对图文实体语义不匹配时，引入无关的视觉语义特征干扰判断，从而错误预测为中性。而本章方法通过多角度相关性建模解耦了视觉特征，在过滤无关图像语义的同时精准保留了其负面情感特征，促使模型准确捕捉到反讽语气并预测为负极性。另外在第二个样例中，文本仅客观描述交通状况，但配图具有极强的负面视觉冲击力。RC-ECG方法由于直接将情感线索描述输入模型，缺乏对单模态表征的独立约束；相比之下，本章方法通过引入单模态情感监督辅助任务，显著增强了模型对文本模态“客观陈述”本质的独立判别能力，同时结合多角度相关性机制准确识别出图文在语义和情感上的双重无关，从而有效屏蔽了视觉情感噪声的侵蚀，最终做出了正确的中性预测。该结果表明多角度相关性建模与单模态辅助监督能够使模型显著提升了多模态方面级情感分析的鲁棒性。
+
 \section{本章小结}  
+本章主要介绍了我们提出的多角度多任务框架(DMRD-MASC)，该框架通过将方面级跨模态情感相关性解耦为情感相关性和语义相关性，分别控制图像情感特征和图像语义特征的细粒度使用。在Twitter-15和Twitter-17数据集上的实验结果表明，本章提出的多角度相关性策略在两个数据集上均取得了最优性能。除此之外还对比了不同粒度的相关性监督信号对模型性能的具体影响，发现细粒度相关性能够更准确地捕捉图文对中情感关联，而粗粒度相关性则在某些情况下可能引入噪声干扰。最后，我们通过样例分析验证了本章方法在复杂多模态语境下的有效性。

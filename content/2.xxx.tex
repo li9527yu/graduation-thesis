@@ -210,10 +210,29 @@
 
 其中，\text{TP}表示该类被模型正确分类的样本数，\text{FP}表示其他类别被不正确地分类到该类别的样本数，\text{FN}表示该类被不正确地分类到其他类别的总样本数，\text{TN}表示其他类别被正确地分类到其他类别的总样本数。
 
+% \begin{table}[width=.9\linewidth,cols=10,pos=t]
+% \caption{Statistics for Twitter-15, Twitter-17 and AECR-Twitter.}\label{tab:dataset_analysis}
+% l
+% \begin{tabular*}{\tblwidth}{@{} L|LLL|LLL|LLL@{}}
+% \hline
+% % \midrule
+% \multirow{2}{*}{\textbf{Dataset}} & \multicolumn{3}{c|}{\textbf{Twitter-15}}                            & \multicolumn{3}{c|}{\textbf{Twitter-17}}    & \multicolumn{3}{c}{\textbf{AECR-Twitter}}      \\ 
+%                          & Train & Dev & Test & Train & Dev & Test & Train & Dev & Test \\  \hline
+% \#Pos                    & 928            & 303          & 317          & 1,508          & 515          & 493    & 1,188          &150         & 170         \\
+% \#Neu                    & 1,883          & 149          & 113        & 1,638          & 144          & 168     & 1,327          &158         & 153          \\
+% \#Neg                    & 368            & 670          & 607           & 416            & 517          & 336     & 383          &47         & 33          \\
+% \#Total                  & 3,179          & 1,122        & 1,037        & 3,562          & 1,176        & 1,234   & 2,851          &355         & 356          \\
+% \#Sent                   & 2,101          & 727          & 674          & 1,746          & 577          & 587   & 1,672          &332         & 335          \\ 
+% \hline
+% \end{tabular*}
+% \end{table}
 
 \subsection{实验参数设置}
+% 
+本研究中对于基线模型 ITM、HIMT、DPFN、A2II、AoM 和 DQPSA，我们遵循其原始设置。为了引入相关性信息，我们使用AECR-Twitter数据集来训练跨模态关系推理模块。该模块为基线模型提供关系感知知识，指导多模态融合过程，并有助于减轻不相关图像的影响。在Qwen2-VL中，我们使用了两个独立的Qwen2-VL-7B模型，并采用LoRA\cite{hu2022lora}进行微调，学习率设为1e-4。为了引入相关性信息，第一个Qwen2-VL模型在AECR-Twitter数据集上进行了微调。随后，该模型被用于生成Twitter-15和Twitter-17数据集的预测相关性标签。第二个模型针对MASC进行微调，其中预测的相关性被包含在指令中，以指导模型抑制不相关图像。对于Qwen2.5-VL，我们使用Qwen2.5-VL-7B 模型，并采用与Qwen2-VL相同的实验设置。所有模型均使用PyTorch框架实现，并在NVIDIA Tesla V100 GPU上运行。我们使用三个不同的随机种子进行实验，并报告平均性能。我们采用Dan Bikel的随机评估比较器进行显著性检验\cite{lenth1990computer}。
+
 \subsection{对比实验设置与结果分析}
-为了验证本章提出方法的有效性，本节在自建数据集AECR-Twitter，Twitter-15 和Twitter-17数据集上，与以下几种相关基线模型进行了对比实验：
+为了验证本章提出方法的有效性，本节在自建数据集AECR-Twitter，Twitter-15 和Twitter-17数据集上，与以下几种相关基线模型进行了对比实验，详细的统计数据见表\ref{tab:dataset_analysis}：
 \begin{itemize}
   \item ITM\cite{yu2022targeted}：该方法提出了粗粒度与细粒度图像-aspect 对齐的多任务学习框架。由于 ITM 原本使用 Yu 等人提出的 aspect-image 相关性数据集来进行基于 aspect 的跨模态关系推理，我们在“ITM + Our AECR”中将其替换为我们的 AECR-Twitter 数据集，用于训练跨模态关系推理模块。
   \item HIMT\cite{yu2022hierarchical}：该方法分层交互式多模态 Transformer 模型。在“HIMT + Our AECR”中，我们将跨模态关系推理模块集成到 HIMT 中，以获取图像与 aspect 之间的相关性权重。

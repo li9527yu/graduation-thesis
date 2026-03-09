@@ -1,26 +1,26 @@
 % !Mode:: "TeX:UTF-8"
 
 \begin{eabstract}
-	Syntactic parsing is one of the most important intermediate processes in sentence comprehension,
-	and probability estimation has always been a core problem in the parsing field.
-	However, in either deep learning (DL) era or pre-DL era, there exist very few works based on global probabilistic modeling, mainly due to the high complexity of tree-structure CRF (TreeCRF) inference.
-	This thesis proposes to apply TreeCRF to both dependency parsing and constituency parsing.
-	The key idea to solve the inefficiency issue is to batchify the inference algorithm for tree structures, and meanwhile avoid the complex Outside algorithm via back-propagation.
-	Currently, parsing models are greatly simplified, and it's a trend to adopt local loss for syntactic parsing.
-	In contrast, we propose a high-order extension to first-order models.
-	While high-order modeling further increases the algorithm complexity, we also try to apply mean field variational inference (MFVI) as an alternative to exact inference of TreeCRF method, which greatly improves the parsing efficiency.
+With the rapid development of mobile internet and social media, user-generated content comprising multimodal data such as text and image become a primary carrier of public sentiment expression. Multimodal Aspect-Based Sentiment Analysis (MABSA), which aims to identify fine-grained sentiment toward specific targets from multimodal data, has emerged as a critical research topic in sentiment analysis. However, existing studies largely focus on explicit semantic alignment between images and text, often overlooking the implicit emotional correlations. In complex social media environments, the relationship between images and text can be complementary, irrelevant, or even contradictory. This ambiguity in emotional orientation and the presence of noise lead to insufficient robustness in existing models when dealing with inconsistent image-text scenarios, as well as a lack of interpretability.
+
+To address these challenges, this thesis investigates MABSA from the perspective of image-text relations, aiming to enhance the model's emotional understanding by accurately characterizing image-text interactions. The main contents and contributions of this thesis are as follows:
+
+First, this study defines aspect-level image-text relevance based on emotional expression and constructs a corresponding annotated dataset. Addressing the limitation that existing definitions focus merely on global semantic alignment while ignoring local emotional associations, this thesis proposes a fine-grained relevance definition based on emotional expression. Through systematic data analysis and benchmark experiments, the intrinsic link between image-text relation types and sentiment polarity is revealed, verifying the effectiveness of incorporating aspect-level cross-modal relevance in improving model performance.
+
+Second, a MABSA method guided by image-text emotional clues is proposed. Targeting the issue of coarse-grained modeling of emotional clues in existing methods, this approach introduces Multimodal Large Language Models (MLLM) to extract aspect-specific emotional clue descriptions from images and text, encoding them as supplementary semantics into the context representation. Meanwhile, fine-grained aspect-level cross-modal relevance is utilized as a guiding signal to control the adaptive fusion of emotional clues and multimodal features. Experimental results indicate that this mechanism effectively suppresses noise interference from irrelevant modalities or conflicting clues, significantly enhancing the model's ability to comprehend complex emotional expressions.
+
+Finally, a MABSA method based on multi-angle image-text relevance decoupling is presented. To further improve robustness in complex scenarios, this thesis decouples the aspect-level cross-modal relevance into two independent dimensions: semantic relevance and emotional relevance. By separately extracting semantic and emotional features from images and using the decoupled multi-angle relevance probabilities as gating signals, precise control over feature fusion is achieved. Furthermore, a multi-task learning mechanism is constructed to transform single-modal emotional clues from input prompts into supervision signals during the training phase. This encourages the model to actively capture key emotional features, thereby improving the accuracy of sentiment analysis while effectively filtering visual noise.
 
 	\vskip 21bp
 	{\bf\zihao{-4} Key words: }
-	Syntactic Parsing,
-	Dependency Parsing,
-	Constituency Parsing,
-	TreeCRF,
-	Variational Inference
+	Multimodal Sentiment Analysis; 
+	Aspect-Level Sentiment Analysis; 
+	Image-Text Relation;
+	 Multimodal Large Language Model; 
 \end{eabstract}
 
 \begin{flushright}
-	Written by Yu Zhang
+	Written by Zhaoyu Li
 	
-	Supervised by Zhenghua Li
+	Supervised by Guohong Fu
 \end{flushright}

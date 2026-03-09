@@ -19,44 +19,47 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: reference.bib
-You've used 25 entries,
+Warning--empty year in zhangm2seq2seq
+Warning--empty year in zhangm2seq2seq
+You've used 71 entries,
             4952 wiz_defined-function locations,
-            1135 strings with 13906 characters,
-and the built_in function-call counts, 272651 in all, are:
-= -- 4502
-> -- 32744
-< -- 41044
-+ -- 11167
-- -- 1764
-* -- 1507
-:= -- 37817
-add.period$ -- 75
-call.type$ -- 25
-change.case$ -- 50
-chr.to.int$ -- 10151
-cite$ -- 25
-duplicate$ -- 558
-empty$ -- 1583
-format.name$ -- 1261
-if$ -- 70675
-int.to.chr$ -- 2
-int.to.str$ -- 26
+            1377 strings with 24632 characters,
+and the built_in function-call counts, 753916 in all, are:
+= -- 12456
+> -- 90526
+< -- 113506
++ -- 30851
+- -- 4856
+* -- 4184
+:= -- 104443
+add.period$ -- 213
+call.type$ -- 71
+change.case$ -- 142
+chr.to.int$ -- 28015
+cite$ -- 73
+duplicate$ -- 1497
+empty$ -- 4421
+format.name$ -- 3417
+if$ -- 195493
+int.to.chr$ -- 8
+int.to.str$ -- 72
 missing$ -- 0
-newline$ -- 154
-num.names$ -- 75
-pop$ -- 14275
+newline$ -- 402
+num.names$ -- 213
+pop$ -- 40092
 preamble$ -- 1
-purify$ -- 25
+purify$ -- 71
 quote$ -- 0
-skip$ -- 29034
+skip$ -- 79762
 stack$ -- 0
-substring$ -- 12135
-swap$ -- 33
-text.length$ -- 591
+substring$ -- 33682
+swap$ -- 92
+text.length$ -- 1593
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 299
-warning$ -- 0
-while$ -- 697
+type$ -- 859
+warning$ -- 2
+while$ -- 1912
 width$ -- 0
-write$ -- 356
+write$ -- 991
+(There were 2 warnings)

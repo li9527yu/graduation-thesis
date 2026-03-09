@@ -1,4 +1,4 @@
-\begin{thebibliography}{25}
+\begin{thebibliography}{71}
 \providecommand{\biband}{和}
 \providecommand{\bibetal}{等}
 \providecommand{\natexlab}[1]{#1}
@@ -13,17 +13,284 @@
   \let\eprint\href
 \fi
 
-\bibitem[Ling {\bibetal}(2022)Ling, Yu, and Xia]{ling-etal-2022-vision}
+\bibitem[Alamoodi {\bibetal}(2021)Alamoodi, Zaidan, Zaidan, Albahri, Mohammed, Malik, Almahdi, Chyad, Tareq, Albahri, et~al.]{alamoodi2021sentiment}
+Alamoodi~A~H, Zaidan~B~B, Zaidan~A~A, Albahri~O~S, Mohammed~K~I, Malik~R~Q, Almahdi~E~M, Chyad~M~A, Tareq~Z, Albahri~A~S, et~al.
+\newblock Sentiment analysis and its applications in fighting covid-19 and infectious diseases: A systematic review [J].
+\newblock Expert systems with applications, 2021, 167: 114155.
+
+\bibitem[Yue {\bibetal}(2019)Yue, Chen, Li, Zuo, and Yin]{yue2019survey}
+Yue~L, Chen~W, Li~X, Zuo~W, Yin~M.
+\newblock A survey of sentiment analysis in social media [J].
+\newblock Knowledge and information systems, 2019, 60\penalty0 (2): 617-663.
+
+\bibitem[Wankhade {\bibetal}(2022)Wankhade, Rao, and Kulkarni]{wankhade2022survey}
+Wankhade~M, Rao~A~C~S, Kulkarni~C.
+\newblock A survey on sentiment analysis methods, applications, and challenges [J].
+\newblock Artificial intelligence review, 2022, 55\penalty0 (7): 5731-5780.
+
+\bibitem[Das {\bibetal}(2023)Das and Singh]{das2023multimodal}
+Das~R, Singh~T~D.
+\newblock Multimodal sentiment analysis: a survey of methods, trends, and challenges [J].
+\newblock ACM Computing Surveys, 2023, 55\penalty0 (13s): 1-38.
+
+\bibitem[Vitman {\bibetal}(2023)Vitman, Kostiuk, Sidorov, and Gelbukh]{vitman2023sarcasm}
+Vitman~O, Kostiuk~Y, Sidorov~G, Gelbukh~A.
+\newblock Sarcasm detection framework using context, emotion and sentiment features [J].
+\newblock Expert Systems with Applications, 2023, 234: 121068.
+
+\bibitem[Zhang {\bibetal}()Zhang, Wang, Liu, Rong, Zheng, Tiwari, Song, and Qin]{zhangm2seq2seq}
+Zhang~Y, Wang~J, Liu~Y, Rong~L, Zheng~Q, Tiwari~P, Song~D, Qin~J.
+\newblock M2seq2seq: A multi-task sequence to sequence learning model for multi-modal sarcasm, sentiment and emotion recognition in conversation [J].
+\newblock Sentiment and Emotion Recognition in Conversation.
+
+\bibitem[Zhang {\bibetal}(2021)Zhang, Cao, Li, Sheng, Zhong, and Shu]{zhang2021mining}
+Zhang~X, Cao~J, Li~X, Sheng~Q, Zhong~L, Shu~K.
+\newblock Mining dual emotion for fake news detection [C]//\allowbreak
+Proceedings of the web conference 2021.
+\newblock 2021: 3465-3476.
+
+\bibitem[Yang {\bibetal}(2022{\natexlab{a}})Yang, Zhu, Liu, Han, and Hu]{yang2022multimodal}
+Yang~C, Zhu~F, Liu~G, Han~J, Hu~S.
+\newblock Multimodal hate speech detection via cross-domain knowledge transfer [C]//\allowbreak
+Proceedings of the 30th ACM International Conference on Multimedia.
+\newblock 2022{\natexlab{a}}: 4505-4514.
+
+\bibitem[Zhao {\bibetal}(2024)Zhao, Yang, Bai, and Liu]{zhao2024survey}
+Zhao~H, Yang~M, Bai~X, Liu~H.
+\newblock A survey on multimodal aspect-based sentiment analysis [J].
+\newblock IEEE Access, 2024, 12: 12039-12052.
+
+\bibitem[Zhang {\bibetal}(2022)Zhang, Li, Deng, Bing, and Lam]{zhang2022survey}
+Zhang~W, Li~X, Deng~Y, Bing~L, Lam~W.
+\newblock A survey on aspect-based sentiment analysis: Tasks, methods, and challenges [J].
+\newblock IEEE Transactions on Knowledge and Data Engineering, 2022, 35\penalty0 (11): 11019-11038.
+
+\bibitem[Wang {\bibetal}(2016)Wang, Huang, Zhu, and Zhao]{wang2016attention}
+Wang~Y, Huang~M, Zhu~X, Zhao~L.
+\newblock Attention-based lstm for aspect-level sentiment classification [C]//\allowbreak
+Proceedings of the 2016 conference on empirical methods in natural language processing.
+\newblock 2016: 606-615.
+
+\bibitem[Chen {\bibetal}(2017)Chen, Sun, Bing, and Yang]{chen2017recurrent}
+Chen~P, Sun~Z, Bing~L, Yang~W.
+\newblock Recurrent attention network on memory for aspect sentiment analysis [C]//\allowbreak
+Proceedings of the 2017 conference on empirical methods in natural language processing.
+\newblock 2017: 452-461.
+
+\bibitem[Sun {\bibetal}(2019)Sun, Huang, and Qiu]{sun2019utilizing}
+Sun~C, Huang~L, Qiu~X.
+\newblock Utilizing bert for aspect-based sentiment analysis via constructing auxiliary sentence [C]//\allowbreak
+Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers).
+\newblock 2019: 380-385.
+
+\bibitem[Wang {\bibetal}(2022)Wang, Liu, Zhu, and Lu]{wang2022aspect}
+Wang~X, Liu~P, Zhu~Z, Lu~R.
+\newblock Aspect-based sentiment analysis with graph convolutional networks over dependency awareness [C]//\allowbreak
+2022 26th International Conference on Pattern Recognition (ICPR).
+\newblock IEEE, 2022: 2238-2245.
+
+\bibitem[Yuan {\bibetal}(2022)Yuan, Wang, Yu, and Zhang]{yuan2022syntactic}
+Yuan~L, Wang~J, Yu~L~C, Zhang~X.
+\newblock Syntactic graph attention network for aspect-level sentiment analysis [J].
+\newblock IEEE Transactions on Artificial Intelligence, 2022, 5\penalty0 (1): 140-153.
+
+\bibitem[Zadeh {\bibetal}(2017)Zadeh, Chen, Poria, Cambria, and Morency]{zadeh2017tensor}
+Zadeh~A, Chen~M, Poria~S, Cambria~E, Morency~L~P.
+\newblock Tensor fusion network for multimodal sentiment analysis [C]//\allowbreak
+Proceedings of the 2017 conference on empirical methods in natural language processing.
+\newblock 2017: 1103-1114.
+
+\bibitem[Majumder {\bibetal}(2018)Majumder, Hazarika, Gelbukh, Cambria, and Poria]{majumder2018multimodal}
+Majumder~N, Hazarika~D, Gelbukh~A, Cambria~E, Poria~S.
+\newblock Multimodal sentiment analysis using hierarchical fusion with context modeling [J].
+\newblock Knowledge-based systems, 2018, 161: 124-133.
+
+\bibitem[Ghosal {\bibetal}(2018)Ghosal, Akhtar, Chauhan, Poria, Ekbal, and Bhattacharyya]{ghosal2018contextual}
+Ghosal~D, Akhtar~M~S, Chauhan~D, Poria~S, Ekbal~A, Bhattacharyya~P.
+\newblock Contextual inter-modal attention for multi-modal sentiment analysis [C]//\allowbreak
+proceedings of the 2018 conference on empirical methods in natural language processing.
+\newblock 2018: 3454-3466.
+
+\bibitem[Xu {\bibetal}(2019)Xu, Mao, and Chen]{xu2019multi}
+Xu~N, Mao~W, Chen~G.
+\newblock Multi-interactive memory network for aspect based multimodal sentiment analysis [C]//\allowbreak
+Proceedings of the AAAI conference on artificial intelligence: volume~33.
+\newblock 2019: 371-378.
+
+\bibitem[Yu {\bibetal}(2019{\natexlab{a}})Yu and Jiang]{yu2019adapting}
+Yu~J, Jiang~J.
+\newblock Adapting bert for target-oriented multimodal sentiment classification [C]//\allowbreak
+Proceedings of the Twenty-Eighth International Joint Conference on Artificial Intelligence.
+\newblock International Joint Conferences on Artificial Intelligence Organization, 2019{\natexlab{a}}: 5408-5414.
+
+\bibitem[Yu {\bibetal}(2019{\natexlab{b}})Yu, Jiang, and Xia]{yu2019entity}
+Yu~J, Jiang~J, Xia~R.
+\newblock Entity-sensitive attention and fusion network for entity-level multimodal sentiment classification [J].
+\newblock IEEE/ACM Transactions on Audio, Speech, and Language Processing, 2019, 28: 429-439.
+
+\bibitem[Wang {\bibetal}(2024{\natexlab{a}})Wang, Tian, Liang, Zhao, He, and Wang]{wang2023dual}
+Wang~D, Tian~C, Liang~X, Zhao~L, He~L, Wang~Q.
+\newblock Dual-perspective fusion network for aspect-based multimodal sentiment analysis [J].
+\newblock IEEE Transactions on Multimedia, 2024, 26: 4028-4038.
+
+\bibitem[Xiao {\bibetal}(2023)Xiao, Wu, Yang, Xu, Zhou, and He]{xiao2023cross}
+Xiao~L, Wu~X, Yang~S, Xu~J, Zhou~J, He~L.
+\newblock Cross-modal fine-grained alignment and fusion network for multimodal aspect-based sentiment analysis [J].
+\newblock Information Processing \& Management, 2023, 60\penalty0 (6): 103508.
+
+\bibitem[Zhao {\bibetal}(2022)Zhao, Wu, Long, Dai, Huang, and Chen]{zhao2022learning}
+Zhao~F, Wu~Z, Long~S, Dai~X, Huang~S, Chen~J.
+\newblock Learning from adjective-noun pairs: A knowledge-enhanced framework for target-oriented multimodal sentiment classification [C]//\allowbreak
+Proceedings of the 29th International Conference on Computational Linguistics.
+\newblock International Committee on Computational Linguistics, 2022: 6784-6794.
+
+\bibitem[Ju {\bibetal}(2021)Ju, Zhang, Xiao, Li, Li, Zhang, and Zhou]{ju2021joint}
+Ju~X, Zhang~D, Xiao~R, Li~J, Li~S, Zhang~M, Zhou~G.
+\newblock Joint multi-modal aspect-sentiment analysis with auxiliary cross-modal relation detection [C]//\allowbreak
+Proceedings of the 2021 conference on empirical methods in natural language processing.
+\newblock 2021: 4395-4405.
+
+\bibitem[Yu {\bibetal}(2022)Yu, Wang, Xia, and Li]{yu2022targeted}
+Yu~J, Wang~J, Xia~R, Li~J.
+\newblock Targeted multimodal sentiment classification based on coarse-to-fine grained image-target matching [C]//\allowbreak
+Proceedings of the Thirty-First International Joint Conference on Artificial Intelligence.
+\newblock International Joint Conferences on Artificial Intelligence Organization, 2022: 4482-4488.
+
+\bibitem[Feng {\bibetal}(2024)Feng, Lin, Shang, and Gao]{feng2024autonomous}
+Feng~J, Lin~M, Shang~L, Gao~X.
+\newblock Autonomous aspect-image instruction a2ii: Q-former guided multimodal sentiment classification [C]//\allowbreak
+Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation.
+\newblock 2024: 1996-2005.
+
+\bibitem[Wang {\bibetal}(2024{\natexlab{b}})Wang, Ding, Shen, Luo, Hu, and Tao]{wang2024wisdom}
+Wang~W, Ding~L, Shen~L, Luo~Y, Hu~H, Tao~D.
+\newblock Wisdom: Improving multimodal sentiment analysis by fusing contextual world knowledge [C]//\allowbreak
+Proceedings of the 32nd ACM International Conference on Multimedia.
+\newblock 2024{\natexlab{b}}: 2282-2291.
+
+\bibitem[Yang {\bibetal}(2022{\natexlab{b}})Yang, Na, and Yu]{yang2022cross}
+Yang~L, Na~J~C, Yu~J.
+\newblock Cross-modal multitask transformer for end-to-end multimodal aspect-based sentiment analysis [J].
+\newblock Information Processing \& Management, 2022, 59\penalty0 (5): 103038.
+
+\bibitem[Ling {\bibetal}(2022{\natexlab{a}})Ling, Yu, and Xia]{ling2022vision}
 Ling~Y, Yu~J, Xia~R.
 \newblock Vision-language pre-training for multimodal aspect-based sentiment analysis [C]//\allowbreak
-Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers).
-\newblock Association for Computational Linguistics, 2022: 2149-2159.
+Proceedings of the 60th annual meeting of the association for computational linguistics (volume 1: long papers).
+\newblock 2022{\natexlab{a}}: 2149-2159.
 
 \bibitem[Zhou {\bibetal}(2023)Zhou, Guo, Liu, Yu, Zhang, and Yuan]{zhou2023aomdetectingaspectorientedinformation}
 Zhou~R, Guo~W, Liu~X, Yu~S, Zhang~Y, Yuan~X.
 \newblock {A}o{M}: Detecting aspect-oriented information for multimodal aspect-based sentiment analysis [C]//\allowbreak
 Findings of the Association for Computational Linguistics.
 \newblock Association for Computational Linguistics, 2023: 8184-8196.
+
+\bibitem[Chen {\bibetal}(2024)Chen, Zhu, Xu, Zhang, Wu, and Zheng]{chen2024aspects}
+Chen~Z, Zhu~Z, Xu~W, Zhang~Y, Wu~X, Zheng~Y.
+\newblock Aspects are anchors: Towards multimodal aspect-based sentiment analysis via aspect-driven alignment and refinement [C]//\allowbreak
+Proceedings of the 32nd ACM International Conference on Multimedia.
+\newblock 2024: 2292-2300.
+
+\bibitem[Zhao {\bibetal}(2023)Zhao, Li, Wu, Ouyang, Zhang, and Dai]{zhao2023m2df}
+Zhao~F, Li~C, Wu~Z, Ouyang~Y, Zhang~J, Dai~X.
+\newblock M2df: multi-grained multi-curriculum denoising framework for multimodal aspect-based sentiment analysis [C]//\allowbreak
+Proceedings of the 2023 conference on empirical methods in natural language processing.
+\newblock 2023: 9057-9070.
+
+\bibitem[Mu {\bibetal}(2023)Mu, Nie, Wang, Xu, Zhang, and Liu]{mu2023mocolnet}
+Mu~J, Nie~F, Wang~W, Xu~J, Zhang~J, Liu~H.
+\newblock Mocolnet: A momentum contrastive learning network for multimodal aspect-level sentiment analysis [J].
+\newblock IEEE Transactions on Knowledge and Data Engineering, 2023, 36\penalty0 (12): 8787-8800.
+
+\bibitem[Yang {\bibetal}(2023{\natexlab{a}})Yang, Feng, Wang, Sun, Wu, Zhang, Hong, and Poria]{yang2023few}
+Yang~X, Feng~S, Wang~D, Sun~Q, Wu~W, Zhang~Y, Hong~P, Poria~S.
+\newblock Few-shot joint multimodal aspect-sentiment analysis based on generative multimodal prompt [C]//\allowbreak
+Findings of the association for computational linguistics: ACL 2023.
+\newblock 2023{\natexlab{a}}: 11575-11589.
+
+\bibitem[Xiao {\bibetal}(2024)Xiao, Wu, Xu, Li, Jin, and He]{xiao2024atlantis}
+Xiao~L, Wu~X, Xu~J, Li~W, Jin~C, He~L.
+\newblock Atlantis: Aesthetic-oriented multiple granularities fusion network for joint multimodal aspect-based sentiment analysis [J].
+\newblock Information Fusion, 2024, 106: 102304.
+
+\bibitem[Yang {\bibetal}(2023{\natexlab{b}})Yang, Wang, Na, and Yu]{yang2023generating}
+Yang~L, Wang~J, Na~J~C, Yu~J.
+\newblock Generating paraphrase sentences for multimodal entity-category-sentiment triple extraction [J].
+\newblock Knowledge-Based Systems, 2023, 278: 110823.
+
+\bibitem[Yang {\bibetal}(2024)Yang, Wang, Li, Na, and Yu]{yang2024empirical}
+Yang~L, Wang~Z, Li~Z, Na~J~C, Yu~J.
+\newblock An empirical study of multimodal entity-based sentiment analysis with chatgpt: Improving in-context learning via entity-aware contrastive learning [J].
+\newblock Information Processing \& Management, 2024, 61\penalty0 (4): 103724.
+
+\bibitem[Marsh {\bibetal}(2003)Marsh and Domas~White]{marsh2003taxonomy}
+Marsh~E~E, Domas~White~M.
+\newblock A taxonomy of relationships between images and text [J].
+\newblock Journal of documentation, 2003, 59\penalty0 (6): 647-672.
+
+\bibitem[Lenth(1990)]{lenth1990computer}
+Lenth~R~V.
+\newblock Computer intensive methods for testing hypotheses: An introduction [M].
+\newblock Taylor \& Francis, 1990.
+
+\bibitem[Martinec {\bibetal}(2005)Martinec and Salway]{martinec2005system}
+Martinec~R, Salway~A.
+\newblock A system for image--text relations in new (and old) media [J].
+\newblock Visual communication, 2005, 4\penalty0 (3): 337-371.
+
+\bibitem[Chen {\bibetal}(2013)Chen, Lu, Kan, and Cui]{chen2013understanding}
+Chen~T, Lu~D, Kan~M~Y, Cui~P.
+\newblock Understanding and classifying image tweets [C]//\allowbreak
+Proceedings of the 21st ACM international conference on Multimedia.
+\newblock 2013: 781-784.
+
+\bibitem[Vempala {\bibetal}(2019)Vempala and Preo{\c{t}}iuc-Pietro]{vempala2019categorizing}
+Vempala~A, Preo{\c{t}}iuc-Pietro~D.
+\newblock Categorizing and inferring the relationship between the text and image of twitter posts [C]//\allowbreak
+Proceedings of the 57th annual meeting of the Association for Computational Linguistics.
+\newblock 2019: 2830-2840.
+
+\bibitem[Wang {\bibetal}(2014)Wang, Cui, Xie, Zhu, Rui, and Yang]{wang2014bilateral}
+Wang~Z, Cui~P, Xie~L, Zhu~W, Rui~Y, Yang~S.
+\newblock Bilateral correspondence model for words-and-pictures association in multimedia-rich microblogs [J].
+\newblock ACM Transactions on Multimedia Computing, Communications, and Applications, 2014, 10\penalty0 (4): 1-21.
+
+\bibitem[Xu {\bibetal}(2022)Xu, Wang, Tian, Zhang, and Mao]{xu2022ananet}
+Xu~N, Wang~J, Tian~Y, Zhang~R, Mao~W.
+\newblock Ananet: Association and alignment network for modeling implicit relevance in cross-modal correlation classification [J].
+\newblock IEEE Transactions on Multimedia, 2022, 25: 7867-7880.
+
+\bibitem[Chen {\bibetal}(2023)Chen, Su, Wu, and Hua]{chen2023joint}
+Chen~D, Su~W, Wu~P, Hua~B.
+\newblock Joint multimodal sentiment analysis based on information relevance [J].
+\newblock Information Processing \& Management, 2023, 60\penalty0 (2): 103193.
+
+\bibitem[Radford {\bibetal}(2021)Radford, Kim, Hallacy, Ramesh, Goh, Agarwal, Sastry, Askell, Mishkin, Clark, et~al.]{radford2021learning}
+Radford~A, Kim~J~W, Hallacy~C, Ramesh~A, Goh~G, Agarwal~S, Sastry~G, Askell~A, Mishkin~P, Clark~J, et~al.
+\newblock Learning transferable visual models from natural language supervision [C]//\allowbreak
+International conference on machine learning.
+\newblock PmLR, 2021: 8748-8763.
+
+\bibitem[Li {\bibetal}(2021)Li, Selvaraju, Gotmare, Joty, Xiong, and Hoi]{li2021align}
+Li~J, Selvaraju~R, Gotmare~A, Joty~S, Xiong~C, Hoi~S~C~H.
+\newblock Align before fuse: Vision and language representation learning with momentum distillation [J].
+\newblock Advances in neural information processing systems, 2021, 34: 9694-9705.
+
+\bibitem[Cheng {\bibetal}(2022)Cheng, Zhu, Qian, Wen, and Liu]{cheng2022cross}
+Cheng~Y, Zhu~X, Qian~J, Wen~F, Liu~P.
+\newblock Cross-modal graph matching network for image-text retrieval [J].
+\newblock ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM), 2022, 18\penalty0 (4): 1-23.
+
+\bibitem[Huang {\bibetal}(2021)Huang, Niu, Liu, Ding, Xiao, Wu, and Peng]{huang2021learning}
+Huang~Z, Niu~G, Liu~X, Ding~W, Xiao~X, Wu~H, Peng~X.
+\newblock Learning with noisy correspondence for cross-modal matching [J].
+\newblock Advances in Neural Information Processing Systems, 2021, 34: 29406-29419.
+
+\bibitem[Ling {\bibetal}(2022{\natexlab{b}})Ling, Yu, and Xia]{ling-etal-2022-vision}
+Ling~Y, Yu~J, Xia~R.
+\newblock Vision-language pre-training for multimodal aspect-based sentiment analysis [C]//\allowbreak
+Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers).
+\newblock Association for Computational Linguistics, 2022{\natexlab{b}}: 2149-2159.
 
 \bibitem[Peng {\bibetal}(2024)Peng, Li, Wang, Zhang, and Zhao]{peng2024novel}
 Peng~T, Li~Z, Wang~P, Zhang~L, Zhao~H.
@@ -46,46 +313,6 @@ Proceedings of the 18th ACM Conference on Recommender Systems.
 Luvembe~A~M, Li~W, Li~S, Liu~F, Xu~G.
 \newblock Dual emotion based fake news detection: A deep attention-weight update approach [J].
 \newblock Information Processing \& Management, 2023, 60\penalty0 (4): 103354.
-
-\bibitem[Ju {\bibetal}(2021)Ju, Zhang, Xiao, Li, Li, Zhang, and Zhou]{ju2021joint}
-Ju~X, Zhang~D, Xiao~R, Li~J, Li~S, Zhang~M, Zhou~G.
-\newblock Joint multi-modal aspect-sentiment analysis with auxiliary cross-modal relation detection [C]//\allowbreak
-Proceedings of the 2021 conference on empirical methods in natural language processing.
-\newblock 2021: 4395-4405.
-
-\bibitem[Vempala {\bibetal}(2019)Vempala and Preo{\c{t}}iuc-Pietro]{vempala2019categorizing}
-Vempala~A, Preo{\c{t}}iuc-Pietro~D.
-\newblock Categorizing and inferring the relationship between the text and image of twitter posts [C]//\allowbreak
-Proceedings of the 57th annual meeting of the Association for Computational Linguistics.
-\newblock 2019: 2830-2840.
-
-\bibitem[Yu {\bibetal}(2022)Yu, Wang, Xia, and Li]{yu2022targeted}
-Yu~J, Wang~J, Xia~R, Li~J.
-\newblock Targeted multimodal sentiment classification based on coarse-to-fine grained image-target matching [C]//\allowbreak
-Proceedings of the Thirty-First International Joint Conference on Artificial Intelligence.
-\newblock International Joint Conferences on Artificial Intelligence Organization, 2022: 4482-4488.
-
-\bibitem[Chen {\bibetal}(2013)Chen, Lu, Kan, and Cui]{chen2013understanding}
-Chen~T, Lu~D, Kan~M~Y, Cui~P.
-\newblock Understanding and classifying image tweets [C]//\allowbreak
-Proceedings of the 21st ACM international conference on Multimedia.
-\newblock 2013: 781-784.
-
-\bibitem[Xu {\bibetal}(2022)Xu, Wang, Tian, Zhang, and Mao]{xu2022ananet}
-Xu~N, Wang~J, Tian~Y, Zhang~R, Mao~W.
-\newblock Ananet: Association and alignment network for modeling implicit relevance in cross-modal correlation classification [J].
-\newblock IEEE Transactions on Multimedia, 2022, 25: 7867-7880.
-
-\bibitem[Chen {\bibetal}(2023)Chen, Su, Wu, and Hua]{chen2023joint}
-Chen~D, Su~W, Wu~P, Hua~B.
-\newblock Joint multimodal sentiment analysis based on information relevance [J].
-\newblock Information Processing \& Management, 2023, 60\penalty0 (2): 103193.
-
-\bibitem[Yu {\bibetal}(2019)Yu and Jiang]{yu2019adapting}
-Yu~J, Jiang~J.
-\newblock Adapting bert for target-oriented multimodal sentiment classification [C]//\allowbreak
-Proceedings of the Twenty-Eighth International Joint Conference on Artificial Intelligence.
-\newblock International Joint Conferences on Artificial Intelligence Organization, 2019: 5408-5414.
 
 \bibitem[Liu(2019)]{liu2019roberta}
 Liu~Y.
@@ -113,30 +340,24 @@ Yu~J, Chen~K, Xia~R.
 \newblock Hierarchical interactive multimodal transformer for aspect-based multimodal sentiment analysis [J].
 \newblock IEEE Transactions on Affective Computing, 2023, 14\penalty0 (3): 1966-1978.
 
-\bibitem[Wang {\bibetal}(2024{\natexlab{a}})Wang, Tian, Liang, Zhao, He, and Wang]{wang2023dual}
-Wang~D, Tian~C, Liang~X, Zhao~L, He~L, Wang~Q.
-\newblock Dual-perspective fusion network for aspect-based multimodal sentiment analysis [J].
-\newblock IEEE Transactions on Multimedia, 2024, 26: 4028-4038.
-
 \bibitem[Tsai {\bibetal}(2019)Tsai, Bai, Liang, Kolter, Morency, and Salakhutdinov]{tsai2019multimodal}
 Tsai~Y~H~H, Bai~S, Liang~P~P, Kolter~J~Z, Morency~L~P, Salakhutdinov~R.
 \newblock Multimodal transformer for unaligned multimodal language sequences [C]//\allowbreak
 Proceedings of the conference. Association for computational linguistics. Meeting: volume 2019.
 \newblock 2019: 6558.
 
-\bibitem[Feng {\bibetal}(2024)Feng, Lin, Shang, and Gao]{feng2024autonomous}
-Feng~J, Lin~M, Shang~L, Gao~X.
-\newblock Autonomous aspect-image instruction a2ii: Q-former guided multimodal sentiment classification [C]//\allowbreak
-Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation.
-\newblock 2024: 1996-2005.
+\bibitem[Hu {\bibetal}(2022)Hu, Shen, Wallis, Allen-Zhu, Li, Wang, Wang, Chen, et~al.]{hu2022lora}
+Hu~E~J, Shen~Y, Wallis~P, Allen-Zhu~Z, Li~Y, Wang~S, Wang~L, Chen~W, et~al.
+\newblock Lora: Low-rank adaptation of large language models. [J].
+\newblock Iclr, 2022, 1\penalty0 (2): 3.
 
-\bibitem[Dai {\bibetal}(2023)Dai, Li, LI, Tiong, Zhao, Wang, Li, Fung, and Hoi]{NEURIPS2023_9a6a435e}
+\bibitem[Dai {\bibetal}(2023{\natexlab{a}})Dai, Li, LI, Tiong, Zhao, Wang, Li, Fung, and Hoi]{NEURIPS2023_9a6a435e}
 Dai~W, Li~J, LI~D, Tiong~A, Zhao~J, Wang~W, Li~B, Fung~P~N, Hoi~S.
 \newblock Instructblip: Towards general-purpose vision-language models with instruction tuning [C]//\allowbreak
 Advances in Neural Information Processing Systems: volume~36.
-\newblock Curran Associates, Inc., 2023: 49250-49267.
+\newblock Curran Associates, Inc., 2023{\natexlab{a}}: 49250-49267.
 
-\bibitem[Wang {\bibetal}(2024{\natexlab{b}})Wang, Bai, Tan, Wang, Fan, Bai, Chen, Liu, Wang, Ge, et~al.]{wang2024qwen2}
+\bibitem[Wang {\bibetal}(2024{\natexlab{c}})Wang, Bai, Tan, Wang, Fan, Bai, Chen, Liu, Wang, Ge, et~al.]{wang2024qwen2}
 Wang~P, Bai~S, Tan~S, Wang~S, Fan~Z, Bai~J, Chen~K, Liu~X, Wang~J, Ge~W, et~al.
 \newblock Qwen2-vl: Enhancing vision-language model's perception of the world at any resolution [J].
 \newblock arXiv preprint arXiv:2409.12191, 2024.
@@ -146,9 +367,36 @@ Bai~S, Chen~K, Liu~X, Wang~J, Ge~W, Song~S, Dang~K, Wang~P, Wang~S, Tang~J, et~a
 \newblock Qwen2. 5-vl technical report [J].
 \newblock arXiv preprint arXiv:2502.13923, 2025.
 
-\bibitem[Yang {\bibetal}(2024)Yang, Wang, Li, Na, and Yu]{yang2024empirical}
-Yang~L, Wang~Z, Li~Z, Na~J~C, Yu~J.
-\newblock An empirical study of multimodal entity-based sentiment analysis with chatgpt: Improving in-context learning via entity-aware contrastive learning [J].
-\newblock Information Processing \& Management, 2024, 61\penalty0 (4): 103724.
+\bibitem[Chung {\bibetal}(2024)Chung, Hou, Longpre, Zoph, Tay, Fedus, Li, Wang, Dehghani, Brahma, et~al.]{chung2024scaling}
+Chung~H~W, Hou~L, Longpre~S, Zoph~B, Tay~Y, Fedus~W, Li~Y, Wang~X, Dehghani~M, Brahma~S, et~al.
+\newblock Scaling instruction-finetuned language models [J].
+\newblock Journal of Machine Learning Research, 2024, 25\penalty0 (70): 1-53.
+
+\bibitem[Colin(2020)]{colin2020exploring}
+Colin~R.
+\newblock Exploring the limits of transfer learning with a unified text-to-text transformer [J].
+\newblock J. Mach. Learn. Res., 2020, 21.
+
+\bibitem[Fang {\bibetal}(2023)Fang, Wang, Xie, Sun, Wu, Wang, Huang, Wang, and Cao]{fang2023eva}
+Fang~Y, Wang~W, Xie~B, Sun~Q, Wu~L, Wang~X, Huang~T, Wang~X, Cao~Y.
+\newblock Eva: Exploring the limits of masked visual representation learning at scale [C]//\allowbreak
+Proceedings of the IEEE/CVF conference on computer vision and pattern recognition.
+\newblock 2023: 19358-19369.
+
+\bibitem[Dai {\bibetal}(2023{\natexlab{b}})Dai, Li, Li, Tiong, Zhao, Wang, Li, Fung, and Hoi]{dai2023instructblip}
+Dai~W, Li~J, Li~D, Tiong~A, Zhao~J, Wang~W, Li~B, Fung~P~N, Hoi~S.
+\newblock Instructblip: Towards general-purpose vision-language models with instruction tuning [J].
+\newblock Advances in neural information processing systems, 2023, 36: 49250-49267.
+
+\bibitem[Loshchilov {\bibetal}(2017)Loshchilov and Hutter]{loshchilov2017decoupled}
+Loshchilov~I, Hutter~F.
+\newblock Decoupled weight decay regularization [J].
+\newblock arXiv preprint arXiv:1711.05101, 2017.
+
+\bibitem[Kendall {\bibetal}(2018)Kendall, Gal, and Cipolla]{kendall2018multi}
+Kendall~A, Gal~Y, Cipolla~R.
+\newblock Multi-task learning using uncertainty to weigh losses for scene geometry and semantics [C]//\allowbreak
+Proceedings of the IEEE conference on computer vision and pattern recognition.
+\newblock 2018: 7482-7491.
 
 \end{thebibliography}
